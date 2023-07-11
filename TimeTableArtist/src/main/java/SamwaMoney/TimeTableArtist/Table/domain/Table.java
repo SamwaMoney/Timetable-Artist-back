@@ -1,5 +1,9 @@
 package SamwaMoney.TimeTableArtist.Table.domain;
 
+import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
+import SamwaMoney.TimeTableArtist.Comment.entity.PlusComment;
+import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
+import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,11 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Table {
+public class Table extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +31,14 @@ public class Table {
     @Column(nullable = false)
     private Long score;
 
-    /*
-    @ManyToOne
-    @JoinColumn(name = "comment_id", nullable = false)
-    private Comment tableType;
-     */
+    @ManyToMany(mappedBy = "table")
+    private List<PlusComment> plusComments = new ArrayList<>();
 
-    @Column(name = "table_type", nullable = false)
-    private Long tableType;
+    @ManyToMany(mappedBy = "table")
+    private List<MinusComment> minusComments = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "table")
+    private List<SpecialComment> specialComments = new ArrayList<>();
 
     private Long rank;
 
@@ -40,10 +46,13 @@ public class Table {
     private Boolean classHide;
 
     @Builder
-    public Table(Member owner, Long score, Long tableType, Long rank, Boolean classHide) {
+    public Table(Member owner, Long score, List<PlusComment> plusComments, List<MinusComment> minusComments,
+                 List<SpecialComment> specialComments, Long rank, Boolean classHide) {
         this.owner = owner;
         this.score = score;
-        this.tableType = tableType;
+        this.plusComments = plusComments;
+        this.minusComments = minusComments;
+        this.specialComments = specialComments;
         this.rank = rank;
         this.classHide = classHide;
     }
