@@ -18,14 +18,4 @@ public class MinusComment {
 
     @Column(nullable = false)
     private String content;
-
-    @Column(nullable = false)
-    private String shortContent;
-
-    @Column(nullable = false)
-    private Long priority;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_id", nullable = false)
-    private Photo photo;
 }
