@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class TableSpecialComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tablespecialcomment_id", nullable = false, updatable = false)
+    @Column(name = "table_specialcomment_id", nullable = false, updatable = false)
     private Long tablePlusCommentId;
 
     @ManyToOne

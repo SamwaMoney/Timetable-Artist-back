@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class TableMinusComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tableminuscomment_id", nullable = false, updatable = false)
+    @Column(name = "table_minuscomment_id", nullable = false, updatable = false)
     private Long tablePlusCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)

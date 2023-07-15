@@ -15,7 +15,7 @@ public class TablePlusComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tablepluscomment_id", nullable = false, updatable = false)
+    @Column(name = "table_pluscomment_id", nullable = false, updatable = false)
     private Long tablePlusCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
