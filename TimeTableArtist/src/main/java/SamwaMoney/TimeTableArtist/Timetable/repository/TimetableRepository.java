@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface TimetableRepository extends JpaRepository<Timetable, Long> {
-    Optional<Timetable> findByTimetableIdAndOwner(Long timetableId, Long memberId);
+    Optional<Timetable> findByOwnerAndTimetableId(Member owner, Long timetableId);
 }
