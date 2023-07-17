@@ -1,10 +1,10 @@
 package SamwaMoney.TimeTableArtist.Member.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @Getter
-@NoArgsConstructor
 public class MemberLoginRequestDto {
 
     private String username;
