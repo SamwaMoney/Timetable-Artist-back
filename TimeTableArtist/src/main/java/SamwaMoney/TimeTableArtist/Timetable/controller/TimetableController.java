@@ -22,20 +22,4 @@ public class TimetableController {
         Timetable timetable = timetableService.createTimetable(requestDto);
         return TimetableResponseDto.from(timetable);
     }
-
-    // 시간표 삭제 (초기화)
-    @DeleteMapping("/{timetableId}/{memberId}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public String timetableRemove(@PathVariable final Long timetableId, @PathVariable final Long memberId) {
-        timetableService.removeTimetable(timetableId, memberId);
-        return "시간표가 성공적으로 삭제되었습니다.";
-    }
-
-//    // 시간표 삭제 (초기화)
-//    @DeleteMapping("/{timetableId}/members")
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public String timetableRemove(@PathVariable Long timetableId, @RequestParam(name = "memberId", required = true) Long memberId) {
-//        timetableService.removeTimetable(timetableId, memberId);
-//        return "시간표가 성공적으로 삭제되었습니다.";
-//    }
 }
