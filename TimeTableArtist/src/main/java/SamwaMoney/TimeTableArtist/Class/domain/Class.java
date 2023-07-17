@@ -1,6 +1,6 @@
 package SamwaMoney.TimeTableArtist.Class.domain;
 
-import SamwaMoney.TimeTableArtist.Table.domain.Table;
+import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class Class {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false, updatable = false)
-    private Table table;
+    private Timetable table;
 
     @Column(nullable = false)
     private String className;
@@ -45,7 +45,7 @@ public class Class {
     private Long endM;
 
     @Builder
-    public Class(Table table, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM) {
+    public Class(Timetable table, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM) {
         this.table = table;
         this.className = className;
         this.location = location;
