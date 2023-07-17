@@ -28,7 +28,7 @@ public class Timetable extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false, updatable = false)
     private Member owner;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private Long score;
 
     @OneToMany(mappedBy = "timetable")
@@ -42,6 +42,7 @@ public class Timetable extends BaseTimeEntity {
 
     private Long ranking;
 
+    @Column(nullable = false)
     private Boolean classHide;
 
     @Builder
