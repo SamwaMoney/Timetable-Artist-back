@@ -28,4 +28,11 @@ public class TimetableService {
                         .build()
         );
     }
+
+    // 시간표 삭제 (초기화)
+    public void removeTimetable(Long timetableId, Long memberId) {
+        Timetable timetable = timetableRepository.findByTimetableIdAndOwner(timetableId, memberId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+        timetableRepository.delete(timetable);
+    }
 }
