@@ -12,7 +12,7 @@ public enum Weekday {
     THU(3, "목"),
     FRI(4, "금");
 
-    private final Integer Id;
+    private final Integer weekdayId;
 
     private final String title;
 }

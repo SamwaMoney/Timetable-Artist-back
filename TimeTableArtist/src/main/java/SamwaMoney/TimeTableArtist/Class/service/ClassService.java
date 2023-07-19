@@ -25,8 +25,8 @@ public class ClassService {
         this.timetableRepository = timetableRepository;
     }
 
-    public void createClassSchedule(Long memberId, List<ClassDto> classDTOs) {
-        Timetable timetable = timetableRepository.findById(memberId)
+    public void createClassSchedule(Long timetableId, List<ClassDto> classDTOs) {
+        Timetable timetable = timetableRepository.findById(timetableId)
                 .orElseThrow(() -> new RuntimeException("Timetable not found"));
 
         List<Class> classes = new ArrayList<>();
