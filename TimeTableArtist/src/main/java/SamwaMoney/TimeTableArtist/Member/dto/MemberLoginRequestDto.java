@@ -1,9 +1,9 @@
 package SamwaMoney.TimeTableArtist.Member.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class MemberLoginRequestDto {
 
