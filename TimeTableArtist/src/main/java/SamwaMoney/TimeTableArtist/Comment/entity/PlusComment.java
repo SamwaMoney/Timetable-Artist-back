@@ -1,13 +1,10 @@
 package SamwaMoney.TimeTableArtist.Comment.entity;
 
-import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +18,4 @@ public class PlusComment {
 
     @Column(nullable = false)
     private String content;
-
-    @OneToMany(mappedBy = "plusComment")
-    private List<TablePlusComment> tables = new ArrayList<>();
 }
