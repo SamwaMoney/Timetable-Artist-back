@@ -21,7 +21,7 @@ public class Class {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false, updatable = false)
-    private Timetable table;
+    private Timetable timetable;
 
     @Column(nullable = false)
     private String className;
@@ -45,8 +45,8 @@ public class Class {
     private Long endM;
 
     @Builder
-    public Class(Timetable table, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM) {
-        this.table = table;
+    public Class(Timetable timetable, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM) {
+        this.timetable = timetable;
         this.className = className;
         this.location = location;
         this.weekday = weekday;
