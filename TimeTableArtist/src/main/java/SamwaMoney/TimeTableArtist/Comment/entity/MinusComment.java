@@ -23,5 +23,5 @@ public class MinusComment {
     private String content;
 
     @OneToMany(mappedBy = "minusComment")
-    private List<TableMinusComment> tables = new ArrayList<>();
+    private final List<TableMinusComment> tables = new ArrayList<>();
 }
