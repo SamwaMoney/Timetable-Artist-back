@@ -29,10 +29,10 @@ public class Reply extends BaseTimeEntity {
     private Member writer;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private Long content;
+    private String content;
 
     @Builder
-    public Reply(Table table, Member writer, Long content) {
+    public Reply(Table table, Member writer, String content) {
         this.table = table;
         this.writer = writer;
         this.content = content;
