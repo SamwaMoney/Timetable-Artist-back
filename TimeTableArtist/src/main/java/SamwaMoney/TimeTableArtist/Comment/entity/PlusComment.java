@@ -22,6 +22,13 @@ public class PlusComment {
     @Column(nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "plusComment")
-    private List<TablePlusComment> tables = new ArrayList<>();
+    @Column(nullable = false)
+    private String shortContent;
+
+    @Column(nullable = false)
+    private Long priority;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id", nullable = false)
+    private Photo photo;
 }
