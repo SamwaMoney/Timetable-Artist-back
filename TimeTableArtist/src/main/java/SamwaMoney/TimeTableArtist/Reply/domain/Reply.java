@@ -2,7 +2,7 @@ package SamwaMoney.TimeTableArtist.Reply.domain;
 
 import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
-import SamwaMoney.TimeTableArtist.Table.domain.Table;
+import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class Reply extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false)
-    private Table table;
+    private Timetable table;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -32,7 +32,7 @@ public class Reply extends BaseTimeEntity {
     private Long content;
 
     @Builder
-    public Reply(Table table, Member writer, Long content) {
+    public Reply(Timetable table, Member writer, Long content) {
         this.table = table;
         this.writer = writer;
         this.content = content;
