@@ -1,10 +1,13 @@
 package SamwaMoney.TimeTableArtist.Comment.entity;
 
+import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,4 +21,7 @@ public class MinusComment {
 
     @Column(nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "minusComment")
+    private final List<TableMinusComment> tables = new ArrayList<>();
 }
