@@ -1,10 +1,10 @@
 package SamwaMoney.TimeTableArtist.Timetable.dto;
 
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
