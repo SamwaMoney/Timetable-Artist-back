@@ -2,7 +2,8 @@ package SamwaMoney.TimeTableArtist.Class.service;
 
 import SamwaMoney.TimeTableArtist.Class.domain.Class;
 import SamwaMoney.TimeTableArtist.Class.domain.Weekday;
-import SamwaMoney.TimeTableArtist.Class.dto.ClassRequestDto;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Class.repository.ClassRepository;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
@@ -24,12 +25,12 @@ public class ClassService {
         this.timetableRepository = timetableRepository;
     }
 
-    public void createClassSchedule(Long timetableId, List<ClassRequestDto> classDTOs) {
+    public void createClassSchedule(Long timetableId, List<ClassDto> classDTOs) {
         Timetable timetable = timetableRepository.findById(timetableId)
                 .orElseThrow(() -> new RuntimeException("Timetable not found"));
 
         List<Class> classes = new ArrayList<>();
-        for (ClassRequestDto classDto : classDTOs) {
+        for (ClassDto classDto : classDTOs) {
             Weekday weekday = Weekday.valueOf(classDto.getWeekday().toUpperCase());
 
             Class newClass = Class.builder()

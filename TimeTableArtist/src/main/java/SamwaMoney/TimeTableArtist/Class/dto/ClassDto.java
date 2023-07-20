@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ClassRequestDto {
+public class ClassDto {
     private Long memberId;
     private Long table;
     private String className;
