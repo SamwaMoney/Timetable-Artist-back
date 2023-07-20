@@ -26,10 +26,10 @@ public class ClassController {
 
     @PostMapping
     public ResponseEntity<String> createClasses(
-            @RequestHeader("timetableId") Long timetableId,
+            //@RequestHeader("timetableId") Long timetableId,
             @RequestBody List<ClassRequestDto> classDTOs
     ) {
-        classService.createClassSchedule(timetableId, classDTOs);
+        classService.createClassSchedule(classDTOs);
         return new ResponseEntity<>("Classes created successfully", HttpStatus.CREATED);
     }
 }
