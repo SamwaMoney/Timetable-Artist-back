@@ -30,10 +30,10 @@ public class ClassService {
 
         List<Class> classes = new ArrayList<>();
         for (ClassRequestDto classDto : classDTOs) {
-            Weekday weekday = Weekday.valueOf(classDto.getWeekday().toUpperCase());
+            Weekday weekday = Weekday.valueOf(classDto.getWeekday().toString().toUpperCase());
 
             Class newClass = Class.builder()
-                    .table(timetable)
+                    .timetable(timetable)
                     .className(classDto.getClassName())
                     .location(classDto.getLocation())
                     .weekday(weekday)
