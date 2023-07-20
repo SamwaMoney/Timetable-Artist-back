@@ -1,7 +1,6 @@
 package SamwaMoney.TimeTableArtist.Timetable.dto;
 
 import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
-import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
