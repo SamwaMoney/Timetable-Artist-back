@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -34,5 +36,12 @@ public class TimetableService {
         Timetable timetable = timetableRepository.findByTimetableIdAndOwner(timetableId, memberId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
         timetableRepository.delete(timetable);
+    }
+
+    //reply에서 사용
+    @Transactional(readOnly = true)
+    public Timetable findTimetableById(Long timetableId){
+        return timetableRepository.findById(timetableId)
+                .orElseThrow(()->new EntityNotFoundException("해당 시간표가 존재하지 않습니다."));
     }
 }
