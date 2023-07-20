@@ -22,7 +22,7 @@ public class Reply extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false)
-    private Timetable table;
+    private Timetable timetable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -32,8 +32,8 @@ public class Reply extends BaseTimeEntity {
     private Long content;
 
     @Builder
-    public Reply(Timetable table, Member writer, Long content) {
-        this.table = table;
+    public Reply(Timetable timetable, Member writer, Long content) {
+        this.timetable = timetable;
         this.writer = writer;
         this.content = content;
     }

@@ -33,5 +33,5 @@ public class SpecialComment {
     private Photo photo;
 
     @OneToMany(mappedBy = "specialComment")
-    private List<TableSpecialComment> tables = new ArrayList<>();
+    private final List<TableSpecialComment> tables = new ArrayList<>();
 }

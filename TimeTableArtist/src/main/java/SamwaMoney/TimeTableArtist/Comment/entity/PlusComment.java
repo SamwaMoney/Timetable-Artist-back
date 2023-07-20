@@ -23,5 +23,5 @@ public class PlusComment {
     private String content;
 
     @OneToMany(mappedBy = "plusComment")
-    private List<TablePlusComment> tables = new ArrayList<>();
+    private final List<TablePlusComment> tables = new ArrayList<>();
 }
