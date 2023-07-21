@@ -1,8 +1,6 @@
 package SamwaMoney.TimeTableArtist.Class.controller;
 
-        import SamwaMoney.TimeTableArtist.Class.domain.Class;
-        import SamwaMoney.TimeTableArtist.Class.domain.Weekday;
-        import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
+        import SamwaMoney.TimeTableArtist.Class.dto.ClassRequestDto;
         import SamwaMoney.TimeTableArtist.Class.service.ClassService;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.HttpStatus;
@@ -28,10 +26,10 @@ public class ClassController {
 
     @PostMapping
     public ResponseEntity<String> createClasses(
-            @RequestHeader("timetableId") Long timetableId,
-            @RequestBody List<ClassDto> classDTOs
+            //@RequestHeader("timetableId") Long timetableId,
+            @RequestBody List<ClassRequestDto> classDTOs
     ) {
-        classService.createClassSchedule(timetableId, classDTOs);
+        classService.createClassSchedule(classDTOs);
         return new ResponseEntity<>("Classes created successfully", HttpStatus.CREATED);
     }
 }

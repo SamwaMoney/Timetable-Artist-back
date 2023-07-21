@@ -6,12 +6,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ClassDto {
+public class ClassRequestDto {
     private Long memberId;
     private Long table;
     private String className;
     private String location;
-    private Weekday weekday;
+    private String weekday;
     private Long startH;
     private Long startM;
     private Long endH;

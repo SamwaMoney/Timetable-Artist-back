@@ -24,10 +24,10 @@ public class TimetableController {
     }
 
     // 시간표 삭제 (초기화)
-    @DeleteMapping("/{timetableId}/{memberId}")
+    @DeleteMapping("/{member_id}/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public String timetableRemove(@PathVariable final Long timetableId, @PathVariable final Long memberId) {
-        timetableService.removeTimetable(timetableId, memberId);
+    public String timetableRemove(@PathVariable("member_id") final Long memberId, @PathVariable("timetable_id") final Long timetableId) {
+        timetableService.removeTimetable(memberId, timetableId);
         return "시간표가 성공적으로 삭제되었습니다.";
     }
 }
