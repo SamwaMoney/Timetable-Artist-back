@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReplyRequestDto {
+    private Long memberId;
     private String content;
 
     public Reply toEntity(Timetable timetable, Member writer){

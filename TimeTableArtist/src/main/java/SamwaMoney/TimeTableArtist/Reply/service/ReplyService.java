@@ -22,9 +22,9 @@ public class ReplyService {
     private final TimetableService timetableService;
     private final MemberService memberService;
 
-    public Long createReply(Long memberId, Long timetableId, ReplyRequestDto requestDto) {
-        Member writer = memberService.findMemberById(memberId);
+    public Long createReply(Long timetableId, ReplyRequestDto requestDto) {
         Timetable timetable = timetableService.findTimetableById(timetableId);
+        Member writer = memberService.findMemberById(requestDto.getMemberId());
         return replyRepository.save(requestDto.toEntity(timetable, writer)).getReplyId();
     }
 
@@ -47,9 +47,8 @@ public class ReplyService {
                 .orElseThrow(()->new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
     }
 
-    public String removeReply(Member member, Long replyId){
-        Reply reply = replyRepository.findById(replyId).orElseThrow(()->new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+    public void removeReply(Long replyId){
+        Reply reply = findReplyById(replyId);
         replyRepository.delete(reply);
-        return "해당 댓글이 삭제되었습니다.";
     }
 }
