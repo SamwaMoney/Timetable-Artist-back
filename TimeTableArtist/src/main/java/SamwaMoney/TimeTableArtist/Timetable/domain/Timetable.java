@@ -2,6 +2,7 @@ package SamwaMoney.TimeTableArtist.Timetable.domain;
 
 import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
+import SamwaMoney.TimeTableArtist.Class.domain.Class;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
@@ -9,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,7 +30,11 @@ public class Timetable extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false, updatable = false)
     private Member owner;
 
-    @Column(nullable = true)
+    @OneToMany(mappedBy = "timetable")
+    private List<Class> classList = new ArrayList<>();
+
+    @Column(nullable = false)
+    @ColumnDefault("60")
     private Long score;
 
     @OneToMany(mappedBy = "timetable")
@@ -42,7 +48,8 @@ public class Timetable extends BaseTimeEntity {
 
     private Long ranking;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private Boolean classHide;
 
     @Builder
