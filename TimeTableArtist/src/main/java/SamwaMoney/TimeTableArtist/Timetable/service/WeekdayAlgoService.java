@@ -76,6 +76,16 @@ public class WeekdayAlgoService {
             totalScore += value;
         });
 
+        if(good.size() > 3) {
+            good = pickThree(good);
+        }
+        if(bad.size() > 3) {
+            bad = pickThree(bad);
+        }
+        if(special.size() > 3) {
+            special = pickThree(special);
+        }
+
         System.out.println("7교시 있는 날의 수: " + sevenCnt + ", 6시간 이상 학교에 머무는 날 수: " + stayLongCnt);
         System.out.println("퐁당퐁당 수: " + plopCnt + ", 점심 못 먹는 날 수: " + noLunchCnt);
         System.out.println("건물 이동 난이도 상의 수: " + highCnt + ", 오르막길 수: " + uphillCnt);
@@ -84,6 +94,23 @@ public class WeekdayAlgoService {
         System.out.println("요일별 계산에 의한 총 점수: " + totalScore);
 
         return totalScore;
+    }
+
+    public static ArrayList<Integer> pickThree(ArrayList<Integer> list) {
+        // 선택된 3개 코멘트의 ID를 담을 리스트
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Random random = new Random();
+        for(int i=0; i<3; i++) {
+            // 0 이상, 현재 리스트의 크기 미만 중 하나의 수를 랜덤으로 선택
+            int picked = random.nextInt(list.size());
+            // 선택된 수를 인덱스로 사용하여, list에서 수 하나를 꺼내 result로 옮김
+            result.add(list.get(picked));
+            list.remove(picked); // 선택된 수가 list에서 remove되었으므로, 이미 선택된 요소가 중복선택될 우려가 없음
+        }
+
+        // 결과 리스트 리턴
+        return result;
     }
 
     static void dayAlgo(List<ClassDto> day, Map<List<String>, MoveDto> moveDifficulty) {
