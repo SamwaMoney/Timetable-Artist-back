@@ -45,7 +45,7 @@ public class TableLikeService {
         Member owner = memberService.findMemberById(memberId);
         TableLike tableLike = tableLikeRepository.findByOwnerAndTimetable(owner, timetable)
                 .orElseThrow(() -> new RuntimeException("좋아요가 존재하지 않습니다."));
-
+        tableLikeRepository.delete(tableLike);
     }
 
     @Transactional(readOnly = true)
