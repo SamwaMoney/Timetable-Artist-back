@@ -1,17 +1,55 @@
 package SamwaMoney.TimeTableArtist.Timetable.service;
 
+import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
+import SamwaMoney.TimeTableArtist.Class.service.ClassService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class AllClassAlgo {
-    public static void main(String[] args) {
+@Service
+public class AllClassAlgoService {
+    private final TimetableService timetableService;
 
+    @Autowired
+    public AllClassAlgoService(TimetableService timetableService) {
+        this.timetableService = timetableService;
+    }
+
+    // 알고리즘을 수행하고 점수를 반환하는 메서드
+    public int calculateTimetableScore(Long timetableId, ArrayList<Integer> good, ArrayList<Integer> bad) {
+        ClassListDto classListDto = timetableService.scoreTimetable(timetableId);
+
+        int score = 0;
+
+        // 모든 강의 개수에 따른 가점 계산
+        int allCount = classListDto.getClassList().size();
+        int onlineCount = OnlineAlgo(classListDto); // 원격/비대면 강의 개수 계산
+        if (allCount <= 6) {
+            score += (allCount - onlineCount); // 수업 하나당 1점씩 가점
+        } else {
+            score += (6 - onlineCount); // 수업이 7개 이상이라도 6개까지만 가점
+        }
+        score += (onlineCount * 3); // 원격/비대면 강의당 3점씩 가점
+
+        // 1교시 수업에 따른 감점 계산
+        int firstClassCount = FirstClassAlgo(classListDto, good, bad);
+        score -= (firstClassCount * 3); // 1교시 수업 하나당 3점씩 감점
+
+        // 채플 개수에 따른 가점 계산
+        int chapelCount = ChapelAlgo(classListDto);
+        score += (chapelCount * 5); // 채플 하나당 5점씩 가점
+
+        return score;
     }
 
     // 전체 과목 개수 count
     // 수업 7개 미만: 수업 하나당 +1, 원격 비대면일 경우 +7
-    public static int allClassAlgo(Table t, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
+    public static int allClassAlgo(ClassListDto t, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
         Set<String> allClasses = new HashSet<>(); // 모든 강의 리스트
 
         int allCount = 0; // 모든 강의의 수 저장
@@ -21,12 +59,13 @@ public class AllClassAlgo {
         int allBlockCount = 0; // 전체 수업 블럭 수 저장 (90분 단위)
         int chapelCount = ChapelAlgo(t); // 전체 채플 수
         int locationCount = locationAlgo(t); // 전체 강의실 건물 수
+        int firstClassCount = FirstClassAlgo(t, good, bad);
 
-        for (Class c : t.classList) {
-            if (c.location.equals("원격/비대면"))
+        for (ClassDto c : t.getClassList()) {
+            if (c.getLocation().equals("원격/비대면"))
                 online++;
-            allClasses.add(c.className);
-            totalTime += (c.endH - c.startH) * 60 + (c.endM - c.startM);
+            allClasses.add(c.getClassName());
+            totalTime += (c.getEndH() - c.getStartH()) * 60 + (c.getEndH() - c.getStartM());
         }
         allBlockCount = totalTime / 90;
         System.out.println("총 수업시간은 " + totalTime + ", 총 블럭 수는 " + allBlockCount);
@@ -75,34 +114,34 @@ public class AllClassAlgo {
     }
     // 공강 개수 count
     // 요일 공강 하나당 +10
-    public static int DayoffAlgo(Table t, ArrayList<Integer> good, ArrayList<Integer> bad) {
+    public static int DayoffAlgo(ClassListDto t, ArrayList<Integer> good, ArrayList<Integer> bad) {
 
         boolean[] dayOffs = new boolean[5]; // 공강 여부 저장하는 배열
         int score = 0; // 점수 저장
         int dayOffCnt = 0;
 
         // mon
-        if (t.monday.isEmpty()) {
+        if (t.getMonday().isEmpty()) {
             dayOffs[0] = true;
         }
 
         // tue
-        if (t.tuesday.isEmpty()) {
+        if (t.getTuesday().isEmpty()) {
             dayOffs[1] = true;
         }
 
         // wed
-        if (t.wednesday.isEmpty()) {
+        if (t.getWednesday().isEmpty()) {
             dayOffs[2] = true;
         }
 
         // thu
-        if (t.thursday.isEmpty()) {
+        if (t.getThursday().isEmpty()) {
             dayOffs[3] = true;
         }
 
         // fri
-        if (t.friday.isEmpty()) {
+        if (t.getFriday().isEmpty()) {
             dayOffs[4] = true;
             good.add(7); // good comment id 7 최고 인기 금공강!
         }
@@ -135,11 +174,11 @@ public class AllClassAlgo {
     }
 
     // 채플 개수 count
-    public static int ChapelAlgo(Table t) {
+    public static int ChapelAlgo(ClassListDto t) {
         int chapel = 0; // 채플 개수 저장
 
-        for (Class c : t.classList) {
-            if (c.className.equals("채플")) {
+        for (ClassDto c : t.getClassList()) {
+            if (c.getClassName().equals("채플")) {
                 chapel++;
             }
         }
@@ -150,11 +189,11 @@ public class AllClassAlgo {
     }
 
     // 원격/비대면 강의 개수 count
-    public static int OnlineAlgo(Table t) {
+    public static int OnlineAlgo(ClassListDto t) {
         int online = 0; // 원격/비대면 강의 개수 저장
 
-        for (Class c : t.classList) {
-            if (c.location.equals("원격/비대면")) {
+        for (ClassDto c : t.getClassList()) {
+            if (c.getLocation().equals("원격/비대면")) {
                 online++;
             }
         }
@@ -165,11 +204,11 @@ public class AllClassAlgo {
     }
 
     // 오전(1, 2교시) 수업 개수 count
-    public static int MorningClassAlgo(Table t) {
+    public static int MorningClassAlgo(ClassListDto t) {
         int morningClass = 0; // 오전 수업 개수 저장
 
-        for (Class c : t.classList) {
-            if (c.startH == 8 || c.startH == 9) {
+        for (ClassDto c : t.getClassList()) {
+            if (c.getStartH() == 8 || c.getStartH() == 9) {
                 morningClass++;
             }
         }
@@ -182,12 +221,12 @@ public class AllClassAlgo {
 
     // 1교시 수업 개수 count
     // 1교시 수업 유무: 1교시 수업 하나당 -3
-    public static int FirstClassAlgo(Table t, ArrayList<Integer> good, ArrayList<Integer> bad) {
+    public static int FirstClassAlgo(ClassListDto t, ArrayList<Integer> good, ArrayList<Integer> bad) {
         int firstClass = 0; // 1교시 수업 개수 저장
         int score = 0; // 점수 저장
 
-        for (Class c : t.classList) {
-            if (c.startH == 8) {
+        for (ClassDto c : t.getClassList()) {
+            if (c.getStartH() == 8) {
                 firstClass++;
                 score -= 3 ;
             }
@@ -204,16 +243,16 @@ public class AllClassAlgo {
     }
 
     // 강의 장소 수 세는 알고리즘
-    public static int locationAlgo(Table t) {
+    public static int locationAlgo(ClassListDto t) {
 
         Set<String> locations = new HashSet<>(); // 강의 장소 저장
         int locationNum = 0; // 강의 장소의 수 저장
 
-        for (Class c : t.classList) {
-            if (c.className.equals("채플")) // 채플은 제외
+        for (ClassDto c : t.getClassList()) {
+            if (c.getClassName().equals("채플")) // 채플은 제외
                 continue;
             else
-                locations.add(c.location);
+                locations.add(c.getLocation());
         }
 
         locationNum = locations.size();
@@ -223,9 +262,9 @@ public class AllClassAlgo {
     }
 
     // 강의가 모두 오전인지 판별
-    public static boolean allMorningAlgo(Table t) {
-        for (Class c : t.classList) {
-            if (c.endH < 12) {
+    public static boolean allMorningAlgo(ClassListDto t) {
+        for (ClassDto c : t.getClassList()) {
+            if (c.getEndH() < 12) {
                 continue;
             } else {
                 System.out.println("강의 모두 오전 아님");
@@ -237,9 +276,9 @@ public class AllClassAlgo {
     }
 
     // 강의가 모두 오후인지 판별
-    public static boolean allAfternoonAlgo(Table t) {
-        for (Class c : t.classList) {
-            if (c.startH >= 12) {
+    public static boolean allAfternoonAlgo(ClassListDto t) {
+        for (ClassDto c : t.getClassList()) {
+            if (c.getStartH() >= 12) {
                 continue;
             } else {
                 System.out.println("강의 모두 오후 아님");

@@ -6,6 +6,7 @@ import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.repository.ReplyRepository;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
+import SamwaMoney.TimeTableArtist.Timetable.service.AllClassAlgoService;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final TimetableService timetableService;
     private final MemberService memberService;
+    private final AllClassAlgoService allClassAlgoService;
 
     public Long createReply(Long timetableId, ReplyRequestDto requestDto) {
         Timetable timetable = timetableService.findTimetableById(timetableId);

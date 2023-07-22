@@ -1,11 +1,14 @@
 package SamwaMoney.TimeTableArtist.Timetable.service;
 
+import SamwaMoney.TimeTableArtist.Class.dto.MoveDto;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 
-public class WeekdayAlgo {
-    public static void main(String[] args) {
-
-    }
+@Service
+public class WeekdayAlgoService {
 
     public static Map<String, Integer> score;
     public static int sevenCnt;
@@ -18,7 +21,7 @@ public class WeekdayAlgo {
     public static int maxInARowCnt;
     public static int totalScore;
 
-    public static int weekdayAlgo(Table table, Map<List<String>, Move> moveDifficulty, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
+    public static int weekdayAlgo(ClassListDto classListDto, Map<List<String>, MoveDto> moveDifficulty, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
 
         score = new HashMap<>(); // key: 감/가점 요인, value: 감/가점된 점수
         sevenCnt = 0; // 7교시 수
@@ -32,11 +35,11 @@ public class WeekdayAlgo {
 
         totalScore = 0; // 감/가점 총합
 
-        dayAlgo(table.monday, moveDifficulty);
-        dayAlgo(table.tuesday, moveDifficulty);
-        dayAlgo(table.wednesday, moveDifficulty);
-        dayAlgo(table.thursday, moveDifficulty);
-        dayAlgo(table.friday, moveDifficulty);
+        dayAlgo(classListDto.getMonday(), moveDifficulty);
+        dayAlgo(classListDto.getTuesday(), moveDifficulty);
+        dayAlgo(classListDto.getWednesday(), moveDifficulty);
+        dayAlgo(classListDto.getThursday(), moveDifficulty);
+        dayAlgo(classListDto.getFriday(), moveDifficulty);
 
         score.put("threeInARow", -5 * threeInARowCnt);
 
@@ -83,13 +86,13 @@ public class WeekdayAlgo {
         return totalScore;
     }
 
-    static void dayAlgo(List<Class> day, Map<List<String>, Move> moveDifficulty) {
+    static void dayAlgo(List<ClassDto> day, Map<List<String>, MoveDto> moveDifficulty) {
         if (day.isEmpty()){ // 수업이 없는 날이면
             return; // 바로 종료
         }
 
         day.sort((a, b) -> {
-            if (a.startH < b.startH || (a.startH == b.startH && a.startM < b.startM))
+            if (a.getStartH() < b.getStartH() || (a.getStartH() == b.getStartH() && a.getStartM() < b.getStartM()))
                 return -1;
             else
                 return 1;
@@ -98,27 +101,23 @@ public class WeekdayAlgo {
         stayLongCntAlgo(day);
         inARowAlgo(day, moveDifficulty);
         cntTimeAlgo(day);
-
-        return;
     }
 
     // 학교에 머무는 시간이 6시간 이상인 날 세는 함수
-    static void stayLongCntAlgo(List<Class> day){
-        Class first = day.get(0);
-        Class last = day.get(day.size()-1);
-        int diff = (last.endH - first.startH) * 60 + last.endM - first.startM;
+    static void stayLongCntAlgo(List<ClassDto> day){
+        ClassDto first = day.get(0);
+        ClassDto last = day.get(day.size()-1);
+        long diff = (last.getEndH() - first.getStartH()) * 60 + last.getEndM() - first.getStartM();
         if (diff >= 360)
             stayLongCnt++;
-
-        return;
     }
 
     // 연강 관련 로직 처리 함수
-    static void inARowAlgo(List<Class> day, Map<List<String>, Move> moveDifficulty){
+    static void inARowAlgo(List<ClassDto> day, Map<List<String>, MoveDto> moveDifficulty){
         // 각 강의가 각각 몇 연강인지 계산
         ArrayList<Integer> classTime = new ArrayList<>();
-        for (Class c : day) {
-            int time = (c.endH - c.startH) * 60 + c.endM - c.startM;
+        for (ClassDto c : day) {
+            long time = (c.getEndH() - c.getStartH()) * 60 + c.getEndH() - c.getStartM();
             if (time < 90){
                 classTime.add(0);
             } else if (time >= 90 && time < 180){
@@ -132,21 +131,21 @@ public class WeekdayAlgo {
             }
         }
 
-        int diff; // 강의와 강의 사이의 시간을 계산
+        long diff; // 강의와 강의 사이의 시간을 계산
         boolean inARow = false; // 이전 쌍이 연강이었다면 true
         int falseCnt = 0; // 연강이 아닌 경우의 수
         int rowCnt = classTime.get(0); // 현재 연강 수
-        Move move; // 현재 검사하는 쌍의 이동 난이도
+        MoveDto moveDto; // 현재 검사하는 쌍의 이동 난이도
 
         for (int i = 0; i < day.size() - 1; i++) {
-            Class current = day.get(i);
-            Class next = day.get(i + 1);
+            ClassDto current = day.get(i);
+            ClassDto next = day.get(i + 1);
 
             // 강의와 강의 사이의 시간을 계산
-            if (current.endH == next.startH) {
-                diff = next.startM - current.endM;
+            if (current.getEndH() == next.getStartH()) {
+                diff = next.getStartM() - current.getEndM();
             } else {
-                diff = (next.startH - current.endH) * 60 + (next.startM - current.endM);
+                diff = (next.getStartH() - current.getEndH()) * 60 + (next.getStartM() - current.getEndM());
             }
 
             if (diff == 0) { // 강의가 연속되어 있다면
@@ -158,22 +157,22 @@ public class WeekdayAlgo {
                 }
                 maxInARowCnt = Math.max(maxInARowCnt, rowCnt); // 현재까지의 최대 연강 수 저장
 
-                List<String> locationPair = Arrays.asList(current.location, next.location);
+                List<String> locationPair = Arrays.asList(current.getLocation(), next.getLocation());
 
                 // 연속된 두 수업 중 하나라도, 시간이 정해진 원격/비대면 수업이라면, 오르막길이 아닌 이동난이도 '하'와 동일하게 취급
-                if(current.location.equals("원격/비대면") || next.location.equals("원격/비대면"))
+                if(current.getLocation().equals("원격/비대면") || next.getLocation().equals("원격/비대면"))
                     score.put("difficulty", score.getOrDefault("difficulty", 0) + 3);
 
                     // 연속된 두 수업 모두 오프라인 강의라면, 이동난이도 계산
                 else{
-                    move = moveDifficulty.get(locationPair);
+                    moveDto = moveDifficulty.get(locationPair);
 
-                    if (move.uphill) {
+                    if (moveDto.isUphill()) {
                         score.put("uphill", score.getOrDefault("uphill", 0) - 3);
                         uphillCnt++;
                     }
 
-                    switch (move.difficulty) {
+                    switch (moveDto.getDifficulty()) {
                         case LOW:
                             score.put("difficulty", score.getOrDefault("difficulty", 0) + 3);
                             break;
@@ -200,17 +199,16 @@ public class WeekdayAlgo {
             threeInARowCnt++;
         if (falseCnt >= 2)
             plopCnt++;
-        return;
     }
 
     // 점심 못 먹는 날 + 7교시 수 세는 함수
-    static void cntTimeAlgo(List<Class> day){
+    static void cntTimeAlgo(List<ClassDto> day){
         boolean[] hasClass = new boolean[28]; // 8시~22시에 대해 한 인덱스가 30분 동안 수업이 있는지 없는지에 대한 t/f 값
         int hasTimeCnt = 0;
-        for (Class c: day){
-            int time = ((c.endH - c.startH) * 60 + c.endM - c.startM) / 30; // 해당 수업의 30분 블록 수 계산
-            int startIdx = ((c.startH - 8) * 60 + c.startM) / 30; // 해당 수업의 시작 인덱스 계산
-            for (int i = startIdx; i<startIdx + time; i++){ // 시작 인덱스부터 수업 길이만큼 true 처리
+        for (ClassDto c: day){
+            long time = ((c.getEndH() - c.getStartH()) * 60 + c.getEndH() - c.getStartH()) / 30; // 해당 수업의 30분 블록 수 계산
+            long startIdx = ((c.getStartH() - 8) * 60 + c.getStartM()) / 30; // 해당 수업의 시작 인덱스 계산
+            for (int i = (int)startIdx; i<startIdx + time; i++){ // 시작 인덱스부터 수업 길이만큼 true 처리
                 hasClass[i] = true;
             }
         }

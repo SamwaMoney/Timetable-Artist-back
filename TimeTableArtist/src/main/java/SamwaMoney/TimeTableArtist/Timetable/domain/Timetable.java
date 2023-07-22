@@ -6,10 +6,7 @@ import SamwaMoney.TimeTableArtist.Class.domain.Class;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -35,10 +32,14 @@ public class Timetable extends BaseTimeEntity {
 
     @Column(nullable = false)
     @ColumnDefault("60")
+    @Setter
     private Long score;
 
     @OneToMany(mappedBy = "timetable")
     private List<TablePlusComment> plusComments = new ArrayList<>();
+
+    @Setter
+    private Long tableType;
 
     @OneToMany(mappedBy = "timetable")
     private List<TableMinusComment> minusComments = new ArrayList<>();

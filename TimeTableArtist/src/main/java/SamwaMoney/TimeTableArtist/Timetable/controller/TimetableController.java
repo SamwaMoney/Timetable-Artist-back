@@ -52,4 +52,11 @@ public class TimetableController {
         List<ClassDto> classDtoList = classService.findClassesByTimetableId(timetableId);
         return classDtoList;
     }
+
+    // 시간표 채점
+    @PatchMapping("/{timetable_id}/score")
+    public ResponseEntity<String> scoreTimetable(@PathVariable("timetable_id") Long timetableId) {
+        timetableService.scoreTimetable(timetableId);
+        return new ResponseEntity<>("시간표가 성공적으로 채점되었습니다", HttpStatus.OK);
+    }
 }
