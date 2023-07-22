@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class TimetableService {
     private final SpecialCommentRepository specialCommentRepository;
     private final WeekdayAlgoService weekdayAlgoService;
     private final TableTypeAlgoService tableTypeAlgoService;
+    private final Map<List<String>, MoveDto> moveDifficultyMap = makeMoveDifficulties();
 
     // 시간표 생성
     public Timetable createTimetable(TimetableRequestDto requestDto) {
@@ -68,7 +71,7 @@ public class TimetableService {
 
         List<Class> classList = classRepository.findAllByTimetableTimetableId(timetableId);
         List<ClassDto> classDtoList = convertToClassDtoList(classList); // ClassDto 리스트로 변환
-        Map<List<String>, MoveDto> moveDifficulty = new HashMap<>();
+
 
         // 요일별로 분류하여 저장할 리스트들 초기화
         List<ClassDto> monday = new ArrayList<>();
@@ -124,8 +127,13 @@ public class TimetableService {
 
         int score;
         int score1 = AllClassAlgoService.allClassAlgo(classListDto, plusCommentIds, minusCommentIds, specialCommentIds);
-        int score2 = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficulty, plusCommentIds, minusCommentIds, specialCommentIds);
-        score = 60+score1 + score2;
+        int score2 = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
+        score = 60 + score1 + score2;
+        if (score < 0) {
+            score = 0;
+        } else if (score > 100) {
+            score = 100;
+        }
 
         int tableTypeCommentId = tableTypeAlgoService.tableTypeAlgo(specialCommentRepository.getAllIds());
 
