@@ -24,7 +24,7 @@ public class TableLikeService {
 
     // 좋아요 생성
     public void createTableLike(Long timetableId, Long memberId) {
-        Timetable timetable = timetableService.findTimetable(timetableId);
+        Timetable timetable = timetableService.findTimetableById(timetableId);
         Member owner = memberService.findMemberById(memberId);
 
         if (isExistsByOwnerAndTimetable(owner, timetable)) {
@@ -41,7 +41,7 @@ public class TableLikeService {
 
     // 좋아요 삭제
     public void deleteTableLike(Long timetableId, Long memberId) {
-        Timetable timetable = timetableService.findTimetable(timetableId);
+        Timetable timetable = timetableService.findTimetableById(timetableId);
         Member owner = memberService.findMemberById(memberId);
         TableLike tableLike = tableLikeRepository.findByOwnerAndTimetable(owner, timetable)
                 .orElseThrow(() -> new RuntimeException("좋아요가 존재하지 않습니다."));
