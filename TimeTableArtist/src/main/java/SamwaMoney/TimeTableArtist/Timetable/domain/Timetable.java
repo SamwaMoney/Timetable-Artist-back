@@ -53,9 +53,10 @@ public class Timetable extends BaseTimeEntity {
     private Boolean classHide;
 
     @Builder
-    public Timetable(Member owner, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
+    public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
                      List<TableSpecialComment> specialComments, Long ranking, Boolean classHide) {
         this.owner = owner;
+        this.classList = classList;
         this.score = score;
         this.plusComments = plusComments;
         this.minusComments = minusComments;

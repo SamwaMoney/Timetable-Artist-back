@@ -1,11 +1,17 @@
 package SamwaMoney.TimeTableArtist.Timetable.controller;
 
+import SamwaMoney.TimeTableArtist.Class.domain.Class;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
+import SamwaMoney.TimeTableArtist.Class.service.ClassService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFindResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableResponseDto;
+import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +26,8 @@ import java.util.stream.Collectors;
 public class TimetableController {
 
     private final TimetableService timetableService;
+    private final TimetableRepository timetableRepository;
+    private final ClassService classService;
 
     // 시간표 생성
     @PostMapping
@@ -40,8 +48,8 @@ public class TimetableController {
     // 내 시간표 조회
     @GetMapping("/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<List<Class>> timetableFind(@PathVariable("timetable_id") final Long timetableId) {
-        List<Class> classList = timetableService.findClassListByTimetableId(timetableId);
-        return ResponseEntity.ok(classList);
+    public List<ClassDto> findClassListByTimetableId(@PathVariable("timetable_id") Long timetableId) {
+        List<ClassDto> classDtoList = classService.findClassesByTimetableId(timetableId);
+        return classDtoList;
     }
 }

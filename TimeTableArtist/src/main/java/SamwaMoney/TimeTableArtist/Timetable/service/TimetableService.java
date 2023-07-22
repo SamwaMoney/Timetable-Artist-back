@@ -1,11 +1,15 @@
 package SamwaMoney.TimeTableArtist.Timetable.service;
 
+import SamwaMoney.TimeTableArtist.Class.domain.Class;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
 import SamwaMoney.TimeTableArtist.Member.service.MemberService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFindResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
+import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,7 @@ public class TimetableService {
         return timetableRepository.save(
                 Timetable.builder()
                         .owner(owner)
+                        .classList(null)
                         .build()
         );
     }
@@ -45,5 +50,22 @@ public class TimetableService {
     // 내 시간표 조회
     public List<Class> findClassListByTimetableId(Long timetableId) {
         return timetableRepository.findAllByTimetableId(timetableId);
+    }
+
+    // 시간표 ID로 시간표를 찾기
+    public TimetableFindResponseDto findTimetableById(Long timetableId) {
+        Timetable timetable = timetableRepository.findById(timetableId)
+                .orElseThrow(() -> new IllegalArgumentException("시간표를 찾을 수 없습니다. 시간표 ID: " + timetableId));
+
+        List<Class> classList = timetable.getClassList(); // 해당 시간표에 속한 수업들을 가져옴
+        TimetableFindResponseDto responseDto = TimetableFindResponseDto.from(timetable, classList); // 시간표와 수업 리스트를 TimetableFindResponseDto로 변환
+        return responseDto;
+    }
+
+    // 수업 리스트를 ClassDto 리스트로 변환하는 메서드
+    private List<ClassDto> convertClassListToClassDtoList(List<Class> classList) {
+        return classList.stream()
+                .map(ClassDto::from)
+                .collect(Collectors.toList());
     }
 }
