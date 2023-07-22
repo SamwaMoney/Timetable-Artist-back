@@ -16,14 +16,14 @@ public class TableLikeController {
     // timetable 좋아요
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String createTableLike(@PathVariable Long timetableId, @RequestBody TableLikeRequestDto dto) {
-        tableLikeService.createTableLike(dto.getTimetableId(), dto.getMemberId());
+    public String createTableLike(@PathVariable("timetable_id") Long timetableId, @RequestBody TableLikeRequestDto dto) {
+        tableLikeService.createTableLike(timetableId, dto.getMemberId());
         return "좋아요 처리 되었습니다.";
     }
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public String deleteTableLike(@PathVariable Long timetableId, @RequestParam("memberId") Long memberId) {
+    public String deleteTableLike(@PathVariable("timetable_id") Long timetableId, @RequestParam("memberId") Long memberId) {
         tableLikeService.deleteTableLike(timetableId, memberId);
         return "좋아요 삭제 처리 되었습니다.";
     }
