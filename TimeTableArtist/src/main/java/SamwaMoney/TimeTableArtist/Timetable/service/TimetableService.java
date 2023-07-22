@@ -13,7 +13,7 @@ import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +46,14 @@ public class TimetableService {
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
         timetableRepository.delete(timetable);
     }
+
+    //reply에서 사용
+    @Transactional(readOnly = true)
+    public Timetable findTimetableById(Long timetableId){
+        return timetableRepository.findById(timetableId)
+                .orElseThrow(()->new EntityNotFoundException("해당 시간표가 존재하지 않습니다."));
+    }
+}
 
     // 내 시간표 조회
     public List<Class> findClassListByTimetableId(Long timetableId) {
