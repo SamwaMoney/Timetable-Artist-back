@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class ClassRequestDto {
     private Long memberId;
-    private Long table;
+    private Long timetable;
     private String className;
     private String location;
     private String weekday;
