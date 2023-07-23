@@ -1,6 +1,8 @@
 package SamwaMoney.TimeTableArtist.TimetableImg.domain;
 
+import SamwaMoney.TimeTableArtist.Class.domain.Weekday;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,9 +19,15 @@ public class TimetableImg {
     private Long id;
 
     @Column(nullable = false)
-    private String url;
+    private String imgUrl;
 
     //class랑 매핑하기
     @Column(nullable = false)
     private Class class;
+
+    @Builder
+    public TimetableImg(Long id, String imgUrl){
+        this.id = id;
+        this.imgUrl = imgUrl;
+    }
 }
