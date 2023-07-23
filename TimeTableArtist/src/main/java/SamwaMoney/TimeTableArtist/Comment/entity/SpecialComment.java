@@ -2,6 +2,7 @@ package SamwaMoney.TimeTableArtist.Comment.entity;
 
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,9 +24,6 @@ public class SpecialComment {
     private String content;
 
     @Column(nullable = false)
-    private String shortContent;
-
-    @Column(nullable = false)
     private Long priority;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -34,4 +32,13 @@ public class SpecialComment {
 
     @OneToMany(mappedBy = "specialComment")
     private final List<TableSpecialComment> tables = new ArrayList<>();
+
+    @Builder
+    public SpecialComment (Long id, String content, Long priority, Photo photo) {
+        this.specialCommentId = id;
+        this.content = content;
+        this.priority = priority;
+        this.photo = photo;
+    }
+
 }
