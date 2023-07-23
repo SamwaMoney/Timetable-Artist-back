@@ -37,6 +37,7 @@ public class TableLikeService {
                 .build();
 
         tableLikeRepository.save(tableLike);
+        incrementLikeCount(timetable); // 좋아요 개수 증가
     }
 
     // 좋아요 삭제
@@ -45,11 +46,30 @@ public class TableLikeService {
         Member owner = memberService.findMemberById(memberId);
         TableLike tableLike = tableLikeRepository.findByOwnerAndTimetable(owner, timetable)
                 .orElseThrow(() -> new RuntimeException("좋아요가 존재하지 않습니다."));
+
         tableLikeRepository.delete(tableLike);
+        decrementLikeCount(timetable); // 좋아요 개수 감소
     }
 
     @Transactional(readOnly = true)
     public boolean isExistsByOwnerAndTimetable(Member owner, Timetable timetable) {
         return tableLikeRepository.existsByOwnerAndTimetable(owner, timetable);
+    }
+
+    // 좋아요 추가시 좋아요 개수 증가
+    private void incrementLikeCount(Timetable timetable) {
+        timetable.setScore(timetable.getScore() + 1);
+    }
+
+    // 좋아요 삭제시 좋아요 개수 감소
+    private void decrementLikeCount(Timetable timetable) {
+        timetable.setScore(timetable.getScore() - 1);
+    }
+
+    // 좋아요 개수 조회
+    @Transactional(readOnly = true)
+    public long getLikeCount(Long timetableId) {
+        Timetable timetable = timetableService.findTimetableById(timetableId);
+        return timetable.getScore();
     }
 }
