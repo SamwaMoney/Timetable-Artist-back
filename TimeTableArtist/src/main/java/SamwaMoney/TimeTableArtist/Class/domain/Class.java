@@ -19,6 +19,7 @@ public class Class {
     @Column(name = "class_id", nullable = false, updatable = false)
     private Long classId;
 
+    // 테이블과 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false, updatable = false)
     private Timetable timetable;

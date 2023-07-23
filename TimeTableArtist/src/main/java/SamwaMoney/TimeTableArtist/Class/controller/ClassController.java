@@ -24,6 +24,7 @@ public class ClassController {
         this.classService = classService;
     }
 
+    // 수업 생성하기 (배열로)
     @PostMapping
     public ResponseEntity<String> createClasses(
             //@RequestHeader("timetableId") Long timetableId,

@@ -33,6 +33,7 @@ public class ClassService {
             //Weekday weekday = Weekday.valueOf(classDto.getWeekday().toString().toUpperCase());
             Weekday weekday = null;
 
+            // 한글로 요일을 받기 위해 코드 추가
             switch(classDto.getWeekday()){
                 case "월" : weekday = Weekday.MON; break;
                 case "화" : weekday = Weekday.TUE; break;
