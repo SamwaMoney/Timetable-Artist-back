@@ -34,7 +34,8 @@ public class Reply extends BaseTimeEntity {
 
     @Column(nullable = false)
     @ColumnDefault("false") // like 값이 false면 좋아요 누르지 않은 상태
-    private boolean heart;
+    public
+    boolean heart;
 
     @Column(nullable = false)
     @ColumnDefault("0")
