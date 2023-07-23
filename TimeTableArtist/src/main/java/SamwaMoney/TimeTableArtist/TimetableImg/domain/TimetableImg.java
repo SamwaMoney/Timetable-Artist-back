@@ -16,7 +16,10 @@ public class TimetableImg {
     @Column(name="timetableImg_id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name="timetable_id")
-    private Timetable timetable;
+    @Column(nullable = false)
+    private String url;
+
+    //class랑 매핑하기
+    @Column(nullable = false)
+    private Class class;
 }
