@@ -1,0 +1,20 @@
+server:
+  servlet:
+    encoding:
+      force-response: true
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    generate-ddl: false
+    show-sql: false
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  config:
+    import: application-secret.yml
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
