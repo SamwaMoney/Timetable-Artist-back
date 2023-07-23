@@ -26,8 +26,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/members/signup", "/members/login").permitAll()    // 회원가입, 로그인은 무조건 허용
-                .antMatchers(HttpMethod.POST, "/members/**").authenticated() // /members/로 시작하는 다른 URI의 POST 요청은 모두 인증 요구
+                .antMatchers("/members/signup", "/members/login", "/members/refreshtoken").permitAll()    // 회원가입, 로그인은 무조건 허용
+                .antMatchers(HttpMethod.POST, "/members/**").authenticated() // 모든 POST 요청과, /members/로 시작하는 다른 URI의 모든 요청은 인증 요구
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT를 사용하므로 stateless
