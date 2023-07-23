@@ -14,7 +14,8 @@ public class ReplyResponseDto {
     private Long timetableId;
     private String content;
     private LocalDateTime createdAt;
-    // private Integer likeCount;
+    private boolean heart;
+    private Integer replyLikeCount;
 
     public static ReplyResponseDto of (Reply reply){
         return ReplyResponseDto.builder()
@@ -23,6 +24,8 @@ public class ReplyResponseDto {
                 .memberId(reply.getWriter().getMemberId())
                 .content(reply.getContent())
                 .createdAt(reply.getCreatedAt())
+                .heart(reply.isHeart())
+                .replyLikeCount(reply.getReplyLikeCount())
                 .build();
     }
 }

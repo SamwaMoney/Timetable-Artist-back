@@ -27,21 +27,16 @@ public class ReplyService {
     public Long createReply(Long timetableId, ReplyRequestDto requestDto) {
         Timetable timetable = timetableService.findTimetableById(timetableId);
         Member writer = memberService.findMemberById(requestDto.getMemberId());
-        return replyRepository.save(requestDto.toEntity(timetable, writer)).getReplyId();
+        boolean isHeart = false;
+        Integer replyLikeCount = 0;
+        return replyRepository.save(requestDto.toEntity(timetable, writer, isHeart, replyLikeCount)).getReplyId();
     }
 
     @Transactional(readOnly = true)
     public List<Reply> findReplyListByTimetable(Long timetableId){
         Timetable timetable = timetableService.findTimetableById(timetableId);
-        return replyRepository.findAllByTimetable(timetable);
+        return replyRepository.findAllByTimetableOrderByReplyLikeCountDesc(timetable);
     }
-
-    //replylike 구현 이후 완성할 부분
-    //@Transactional l(readOnly = true)
-    //public int getReviewCount(Long storeId) {
-    //    int replylikeCount = replylikeRepository.countByStoreStoreId(storeId);
-    //    return reviewCount;
-    //}
 
     @Transactional(readOnly = true)
     public Reply findReplyById(Long replyId){
@@ -54,3 +49,4 @@ public class ReplyService {
         replyRepository.delete(reply);
     }
 }
+

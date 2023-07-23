@@ -31,6 +31,8 @@ public class TimetableRepliesResponseDto {
         private Long memberId;
         private String content;
         private LocalDateTime createdAt;
+        private boolean heart;
+        private Integer replyLikeCount;
 
         public TimetableReply(Reply reply){
             this.replyId = reply.getReplyId();
@@ -38,6 +40,8 @@ public class TimetableRepliesResponseDto {
             this.memberId = reply.getWriter().getMemberId();
             this.content = reply.getContent();
             this.createdAt = reply.getCreatedAt();
+            this.heart = reply.isHeart();
+            this.replyLikeCount = reply.getReplyLikeCount();
         }
 
         public static TimetableReply of(Reply reply){
