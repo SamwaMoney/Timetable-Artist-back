@@ -51,6 +51,17 @@ public class TableLikeService {
         decrementLikeCount(timetable); // 좋아요 개수 감소
     }
 
+    // 사용자가 시간표를 좋아요했는지 확인
+    @Transactional(readOnly = true)
+    public boolean isTimetableLikedByMember(Long timetableId, Long memberId) {
+        if (memberId == null) {
+            return false;
+        }
+        Timetable timetable = timetableService.findTimetableById(timetableId);
+        Member member = memberService.findMemberById(memberId);
+        return tableLikeRepository.existsByOwnerAndTimetable(member, timetable);
+    }
+
     @Transactional(readOnly = true)
     public boolean isExistsByOwnerAndTimetable(Member owner, Timetable timetable) {
         return tableLikeRepository.existsByOwnerAndTimetable(owner, timetable);
