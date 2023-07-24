@@ -19,7 +19,6 @@ jobs:
 
     runs-on: ubuntu-latest
     env :
-      working-directory: ./
       APPLICATION: ${{ secrets.APPLICATION_SECRET_YML }}
 
     steps:
