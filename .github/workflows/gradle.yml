@@ -34,7 +34,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - uses: actions/checkout@v2
-      - run: touch ./Timetable-Artist-back/TimeTableArtist/src/main/resources/application-secret.yml
+      - run: touch ./Timetable-Artist-back/TimeTableArtist/src/main/resources/application.yml
 
       - run: echo "${{ env.APPLICATION }}" > ./src/main/resources/application-secret.yml
 
