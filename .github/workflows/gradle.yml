@@ -34,14 +34,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - uses: actions/checkout@v2
-      - run: touch ./src/main/resources/application.yml
+      - run: touch ./Timetable-Artist-back/TimeTableArtist/src/main/resources/application-secret.yml
 
       - run: echo "${{ env.APPLICATION }}" > ./src/main/resources/application-secret.yml
 
       - uses: actions/upload-artifact@v2
         with:
           name: application-secret.yml
-          path: ./src/main/resources/application-secret.yml
+          path: ./Timetable-Artist-back/TimeTableArtist/src/main/resources/application-secret.yml
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
