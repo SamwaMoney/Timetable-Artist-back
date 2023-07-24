@@ -57,13 +57,25 @@ public class Timetable extends BaseTimeEntity {
     @Setter
     private boolean isLiked;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    @Setter
+    private Long likeCount;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    @Setter
+    private Long replyCount;
+
+
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "timetable_img_id")
     private TimetableImg timetableImg;
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, Long ranking, Boolean classHide) {
+                     List<TableSpecialComment> specialComments, Long ranking, Boolean classHide, Long likeCount, long replyCount) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -72,5 +84,7 @@ public class Timetable extends BaseTimeEntity {
         this.specialComments = specialComments;
         this.ranking = ranking;
         this.classHide = classHide;
+        this.likeCount = likeCount;
+        this.replyCount = replyCount;
     }
 }

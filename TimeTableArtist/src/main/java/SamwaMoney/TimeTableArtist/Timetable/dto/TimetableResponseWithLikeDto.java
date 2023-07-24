@@ -31,13 +31,13 @@ public class TimetableResponseWithLikeDto {
     }
 
     // timetableDto에서 timetableId 받아오기
-    public static TimetableResponseWithLikeDto from(Timetable timetable, boolean isLiked, String tableType, String tableImg) {
+    public static TimetableResponseWithLikeDto from(Timetable timetable, boolean isLiked, String tableType, String tableImg, Long likeCount) {
         TimetableResponseWithLikeDto dto = new TimetableResponseWithLikeDto();
         dto.setTimetableId(timetable.getTimetableId());
         dto.setOwnerUsername(timetable.getOwner().getUsername());
         dto.setRanking(timetable.getRanking());
         dto.setScore(timetable.getScore());
-        dto.setLikeCount(timetable.getScore());
+        dto.setLikeCount(likeCount);
 //        dto.setReplyCount(timetable.getReplyCount());
         dto.setTableImg(tableImg);
         dto.setTableType(tableType);

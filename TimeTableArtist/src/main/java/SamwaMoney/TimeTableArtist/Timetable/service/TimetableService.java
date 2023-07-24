@@ -79,9 +79,10 @@ public class TimetableService {
         List<TimetableResponseWithLikeDto> responseList = new ArrayList<>();
         for (Timetable timetable : allTimetables) {
             boolean isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
+            long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
             String tableType = "";
             String tableImg = "";
-            responseList.add(TimetableResponseWithLikeDto.from(timetable, isLiked, tableType, tableImg));
+            responseList.add(TimetableResponseWithLikeDto.from(timetable, isLiked, tableType, tableImg, likeCount));
         }
 
         return responseList;
