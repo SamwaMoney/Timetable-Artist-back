@@ -1,7 +1,7 @@
 package SamwaMoney.TimeTableArtist.TableLike.domain;
 
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
-import SamwaMoney.TimeTableArtist.Table.domain.Table;
+import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,15 +21,15 @@ public class TableLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false)
-    private Table table;
+    private Timetable timetable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member owner;
 
     @Builder
-    public TableLike(Table table, Member owner) {
-        this.table = table;
+    public TableLike(Timetable timetable, Member owner) {
+        this.timetable = timetable;
         this.owner = owner;
     }
 }
