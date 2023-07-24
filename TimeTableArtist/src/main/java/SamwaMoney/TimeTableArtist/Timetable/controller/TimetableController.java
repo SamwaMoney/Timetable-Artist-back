@@ -63,7 +63,7 @@ public class TimetableController {
     // 전체 시간표 조회 (사용자가 좋아요한 시간표 포함)
     @GetMapping("/board")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<TimetableResponseWithLikeDto> getAllTimetablesWithLikeStatus(@RequestParam("sortType") boolean sortType, @RequestBody TimetableRankingRequestDto timetableRankingRequestDto) {
+    public List<TimetableResponseWithLikeDto> getAllTimetablesWithLikeStatus(@RequestParam("sortType") String sortType, @RequestBody TimetableRankingRequestDto timetableRankingRequestDto) {
         Long memberId = timetableRankingRequestDto.getMemberId();
         // 좋아요 여부 표시 전 전체 시간표 리스트
         List<TimetableResponseWithLikeDto> responseList = timetableService.getAllTimetablesWithLikeStatus(memberId);

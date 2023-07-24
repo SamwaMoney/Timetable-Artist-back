@@ -9,6 +9,8 @@ import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.service.AllClassAlgoService;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +22,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ReplyService {
     private final ReplyRepository replyRepository;
-    private final TimetableService timetableService;
     private final MemberService memberService;
     private final AllClassAlgoService allClassAlgoService;
+    @Autowired
+    @Lazy
+    private TimetableService timetableService;
 
     public Long createReply(Long timetableId, ReplyRequestDto requestDto) {
         Timetable timetable = timetableService.findTimetableById(timetableId);

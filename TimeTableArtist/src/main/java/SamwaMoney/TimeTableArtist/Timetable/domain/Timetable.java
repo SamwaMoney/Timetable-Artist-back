@@ -3,6 +3,7 @@ package SamwaMoney.TimeTableArtist.Timetable.domain;
 import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Class.domain.Class;
+import SamwaMoney.TimeTableArtist.TimetableImg.domain.TimetableImg;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
@@ -56,8 +57,9 @@ public class Timetable extends BaseTimeEntity {
     @Setter
     private boolean isLiked;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "timetable")
-    private String timetableImg;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "timetable_img_id")
+    private TimetableImg timetableImg;
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,

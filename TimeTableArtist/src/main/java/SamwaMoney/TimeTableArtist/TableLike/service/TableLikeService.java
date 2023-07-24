@@ -10,6 +10,8 @@ import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TableLikeService {
     private final MemberService memberService;
-    private final TimetableService timetableService;
     private final TableLikeRepository tableLikeRepository;
+    @Autowired
+    @Lazy
+    private TimetableService timetableService;
 
     // 좋아요 생성
     public void createTableLike(Long timetableId, Long memberId) {
