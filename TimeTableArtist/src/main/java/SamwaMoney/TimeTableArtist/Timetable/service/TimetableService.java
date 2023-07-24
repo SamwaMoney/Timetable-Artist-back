@@ -9,13 +9,18 @@ import SamwaMoney.TimeTableArtist.Comment.Service.CommentService;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
+import SamwaMoney.TimeTableArtist.Member.service.MemberService;
+import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableResponseWithLikeDto;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +36,7 @@ public class TimetableService {
 
     private final TimetableRepository timetableRepository;
     private final MemberRepository memberRepository;
+    private final TableLikeService tableLikeService;
     private final ClassRepository classRepository;
     private final CommentService commentService;
     private final SpecialCommentRepository specialCommentRepository;
@@ -58,11 +64,27 @@ public class TimetableService {
         timetableRepository.delete(timetable);
     }
 
-    // 댓글 기능에서 사용
+    //reply에서 사용
     @Transactional(readOnly = true)
     public Timetable findTimetableById(Long timetableId){
         return timetableRepository.findById(timetableId)
                 .orElseThrow(()->new EntityNotFoundException("해당 시간표가 존재하지 않습니다."));
+    }
+
+    // 전체 시간표 조회 (사용자가 좋아요한 시간표 포함)
+    @Transactional(readOnly = true)
+    public List<TimetableResponseWithLikeDto> getAllTimetablesWithLikeStatus(Long memberId) {
+        List<Timetable> allTimetables = timetableRepository.findAll();
+
+        List<TimetableResponseWithLikeDto> responseList = new ArrayList<>();
+        for (Timetable timetable : allTimetables) {
+            boolean isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
+            String tableType = "";
+            String tableImg = "";
+            responseList.add(TimetableResponseWithLikeDto.from(timetable, isLiked, tableType, tableImg));
+        }
+
+        return responseList;
     }
 
     public ClassListDto scoreTimetable(Long timetableId) {

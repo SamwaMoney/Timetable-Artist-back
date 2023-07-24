@@ -53,6 +53,12 @@ public class Timetable extends BaseTimeEntity {
     @ColumnDefault("0")
     private Boolean classHide;
 
+    @Setter
+    private boolean isLiked;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "timetable")
+    private String timetableImg;
+
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
                      List<TableSpecialComment> specialComments, Long ranking, Boolean classHide) {
