@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     env :
       working-directory: ./
-      APP: ${{ secrets.APPLICATION_YML }}
       APPLICATION: ${{ secrets.APPLICATION_SECRET_YML }}
 
     steps:
@@ -43,12 +42,8 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - uses: actions/checkout@v2
-      - run: |
-          mkdir ./src/main/resources
-          touch ./src/main/resources/application.yml
-          echo "${{ env.APP }}" > ./src/main/resources/application.yml
-          echo "${{ env.APPLICATION }}" > ./src/main/resources/application-secret.yml
-        shell: bash
+      - run: touch ./src/main/resources/application.yml
+      - run: echo "${{ env.APPLICATION }}" > ./src/main/resources/application-secret.yml
         
       - uses: actions/upload-artifact@v2
         with:
