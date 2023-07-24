@@ -1,6 +1,5 @@
 package SamwaMoney.TimeTableArtist.Timetable.controller;
 
-import SamwaMoney.TimeTableArtist.Class.domain.Class;
 import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Class.service.ClassService;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
@@ -9,15 +8,12 @@ import SamwaMoney.TimeTableArtist.Timetable.dto.*;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

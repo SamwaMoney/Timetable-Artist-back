@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
