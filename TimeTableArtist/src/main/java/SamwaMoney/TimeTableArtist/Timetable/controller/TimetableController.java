@@ -5,6 +5,10 @@ import SamwaMoney.TimeTableArtist.Class.service.ClassService;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFindResponseDto;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFullResponseDto;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +48,8 @@ public class TimetableController {
     // 내 시간표 조회
     @GetMapping("/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<ClassDto> findClassListByTimetableId(@PathVariable("timetable_id") Long timetableId) {
-        List<ClassDto> classDtoList = classService.findClassesByTimetableId(timetableId);
-        return classDtoList;
+    public TimetableFullResponseDto showTimetable(@PathVariable("timetable_id") Long timetableId) {
+        return timetableService.showTimetable(timetableId);
     }
 
     // 시간표 채점
