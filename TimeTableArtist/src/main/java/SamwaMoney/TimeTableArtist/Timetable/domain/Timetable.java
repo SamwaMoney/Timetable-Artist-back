@@ -31,8 +31,6 @@ public class Timetable extends BaseTimeEntity {
     private List<Class> classList = new ArrayList<>();
 
     @Column(nullable = false)
-    @ColumnDefault("60")
-    @Setter
     private Long score;
 
     @OneToMany(mappedBy = "timetable")
@@ -50,7 +48,6 @@ public class Timetable extends BaseTimeEntity {
     private Long ranking;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     private Boolean classHide;
 
     @Builder
@@ -64,5 +61,17 @@ public class Timetable extends BaseTimeEntity {
         this.specialComments = specialComments;
         this.ranking = ranking;
         this.classHide = classHide;
+    }
+
+    // 빈 시간표를 만드는 생성자
+    public Timetable(Member owner) {
+        this.owner = owner;
+        this.classList = new ArrayList<>();
+        this.score = 60L;
+        this.plusComments = new ArrayList<>();
+        this.minusComments = new ArrayList<>();
+        this.specialComments = new ArrayList<>();
+        this.ranking = null;
+        this.classHide = false;
     }
 }
