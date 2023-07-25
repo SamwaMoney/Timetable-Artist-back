@@ -3,9 +3,13 @@ package SamwaMoney.TimeTableArtist.Timetable.service;
 import SamwaMoney.TimeTableArtist.Class.domain.Class;
 import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Class.service.ClassService;
+import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
+import SamwaMoney.TimeTableArtist.Class.dto.MoveDto;
+import SamwaMoney.TimeTableArtist.Class.repository.ClassRepository;
+import SamwaMoney.TimeTableArtist.Comment.Service.CommentService;
+import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
-import SamwaMoney.TimeTableArtist.Member.service.MemberService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFullResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
@@ -15,6 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
 
 @Service
 @Transactional
@@ -24,6 +35,12 @@ public class TimetableService {
     private final TimetableRepository timetableRepository;
     private final MemberRepository memberRepository;
     private final ClassService classService;
+    private final ClassRepository classRepository;
+    private final CommentService commentService;
+    private final SpecialCommentRepository specialCommentRepository;
+    private final WeekdayAlgoService weekdayAlgoService;
+    private final TableTypeAlgoService tableTypeAlgoService;
+    private final Map<List<String>, MoveDto> moveDifficultyMap = makeMoveDifficulties();
 
     // 시간표 생성
     public Timetable createTimetable(TimetableRequestDto requestDto) {
@@ -44,6 +61,7 @@ public class TimetableService {
 
     // ID를 기준으로 시간표 데이터를 찾아오는 메소드
     // reply 및 showTimetable 메소드에서 사용
+
     @Transactional(readOnly = true)
     public Timetable findTimetableById(Long timetableId){
         return timetableRepository.findById(timetableId)

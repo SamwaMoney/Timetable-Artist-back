@@ -14,11 +14,13 @@ public class ReplyRequestDto {
     private Long memberId;
     private String content;
 
-    public Reply toEntity(Timetable timetable, Member writer){
+    public Reply toEntity(Timetable timetable, Member writer, boolean heart, Integer replyLikeCount){
         return Reply.builder()
                 .timetable(timetable)
                 .writer(writer)
                 .content(this.content)
+                .heart(heart)
+                .replyLikeCount(replyLikeCount)
                 .build();
     }
 }
