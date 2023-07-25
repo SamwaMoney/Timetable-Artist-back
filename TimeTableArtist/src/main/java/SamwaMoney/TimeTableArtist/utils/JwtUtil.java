@@ -19,9 +19,10 @@ public class JwtUtil {
                 .getBody().get("userName", String.class);
     }
 
-    public static String createToken (String userName, String key, long expireTimeMs) {
+    // token을 만드는 함수 (createAccessToken과 createRefreshToken이 이 함수를 호출함)
+    public static String createToken (String username, String key, long expireTimeMs) {
         Claims claims = Jwts.claims();  // 일종의 Map. 토큰 생성에 필요한 데이터를 담아두는 공간.
-        claims.put("userName", userName);   // 회원명을 저장
+        claims.put("username", username);   // 회원명을 저장
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -31,5 +32,22 @@ public class JwtUtil {
                 .compact()
                 ;
 
+    }
+
+    // AccessToken을 만드는 함수
+    public static String createAccessToken(String userName, String key, long expireTimeMs) {
+        return createToken(userName, key, expireTimeMs);
+    }
+
+    // RefreshToken을 만드는 함수
+    public static String createRefreshToken (String userName, String key, long expireTimeMs) {
+        return createToken(userName, key, expireTimeMs);
+    }
+
+    public static Claims parseRefreshToken(String value, String key) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(value)
+                .getBody();
     }
 }

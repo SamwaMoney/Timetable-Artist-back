@@ -1,12 +1,14 @@
 package SamwaMoney.TimeTableArtist.Member.service;
 
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
+import SamwaMoney.TimeTableArtist.Member.domain.RefreshToken;
+import SamwaMoney.TimeTableArtist.Member.dto.MemberLoginResponseDto;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
 import SamwaMoney.TimeTableArtist.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +20,19 @@ import javax.persistence.EntityNotFoundException;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final RefreshTokenService refreshTokenService;
     private final BCryptPasswordEncoder encoder;
 
-    // 토큰 만료 시간을 1시간으로 설정
-    private Long expireTimeMs = 1000 * 60 * 60L;
+    // Access 토큰 만료 시간을 1시간으로 설정
+    private Long AccessExpireTimeMs = 1000 * 60 * 60L;
+    // Refresh 토큰 만료 시간을 7일로 설정
+    private Long RefreshExpireTimeMs = 7 * 24 * 1000 * 60 * 60L;
 
     // application-secret.yml 에서 키 가져오기
     @Value("${spring.jwt.secret-key}")
-    private String key;
+    private String accessKey;
+    @Value("${spring.jwt.refresh-key}")
+    private String refreshKey;
 
     // 회원가입
     public String join(String username, String password) {
@@ -44,18 +51,30 @@ public class MemberService {
     }
 
     // 로그인
-    public String login(String username, String password) {
+    public MemberLoginResponseDto login(String username, String password) {
         // 존재하지 않는 username으로 로그인을 시도하였을 경우를 캐치
         Member foundMember = findMemberByUsername(username);
 
         // 존재하는 username을 입력하였지만, 잘못된 비밀번호를 입력하였을 경우를 캐치
         if(!encoder.matches(password, foundMember.getPassword())) throw new RuntimeException("잘못된 비밀번호입니다!");
 
-        // 로그인 성공 -> 토큰 발행
-        String token = JwtUtil.createToken(foundMember.getUsername(), key, expireTimeMs);
+        // 로그인 성공 -> 토큰 생성
+        String accessToken = JwtUtil.createAccessToken(foundMember.getUsername(), accessKey, AccessExpireTimeMs);
+        String refreshToken = JwtUtil.createRefreshToken(foundMember.getUsername(), refreshKey, RefreshExpireTimeMs);
 
-        // 발행된 토큰의 값을 리턴
-        return token;
+        // RefreshToken을 DB에 저장
+        RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setValue(refreshToken);
+        refreshTokenEntity.setMemberId(foundMember.getMemberId());
+        refreshTokenService.addRefreshToken(refreshTokenEntity);
+
+        // 결과물을 DTO에 담아 리턴
+        return MemberLoginResponseDto.builder()
+                .memberId(foundMember.getMemberId())
+                .username(foundMember.getUsername())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     // 회원탈퇴
@@ -87,5 +106,28 @@ public class MemberService {
     @Transactional(readOnly = true)
     public boolean existsByUserName(String username) {
         return memberRepository.existsByUsername(username);
+    }
+
+    public MemberLoginResponseDto requestRefresh(String refreshToken) {
+        // 해당 RefreshToken이 유효한지 DB에서 탐색
+        RefreshToken foundRefreshToken = refreshTokenService.findRefreshToken(refreshToken);
+        // RefreshToken에 들어있는 username 값 가져오기
+        Claims claims = JwtUtil.parseRefreshToken(foundRefreshToken.getValue(), refreshKey);
+        String username = claims.get("username").toString();
+        System.out.println("Username found in RefreshToken: " + username);
+        // 가져온 username에 해당하는 회원이 존재하는지 확인
+        Member member = findMemberByUsername(username);
+
+        // 새 AccessKey 생성
+        String accessToken = JwtUtil.createAccessToken(member.getUsername(), accessKey, AccessExpireTimeMs);
+
+        // 새 AccessKey와 기존 RefreshKey를 DTO에 담아 리턴
+        return MemberLoginResponseDto
+                .builder()
+                .memberId(member.getMemberId())
+                .username(member.getUsername())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }
