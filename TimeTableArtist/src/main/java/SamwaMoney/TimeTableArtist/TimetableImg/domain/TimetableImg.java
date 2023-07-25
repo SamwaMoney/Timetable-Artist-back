@@ -22,7 +22,8 @@ public class TimetableImg {
     private String imgUrl;
 
     //class랑 매핑하기
-    @Column(nullable = false)
+    @OneToOne
+    @JoinColumn(name="class_id")
     private Class class;
 
     @Builder
