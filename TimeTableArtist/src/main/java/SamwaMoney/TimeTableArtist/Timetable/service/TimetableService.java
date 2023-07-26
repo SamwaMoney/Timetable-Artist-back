@@ -2,6 +2,7 @@ package SamwaMoney.TimeTableArtist.Timetable.service;
 
 import SamwaMoney.TimeTableArtist.Class.domain.Class;
 import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
+import SamwaMoney.TimeTableArtist.Class.service.ClassService;
 import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
 import SamwaMoney.TimeTableArtist.Class.dto.MoveDto;
 import SamwaMoney.TimeTableArtist.Class.repository.ClassRepository;
@@ -9,13 +10,20 @@ import SamwaMoney.TimeTableArtist.Comment.Service.CommentService;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
+import SamwaMoney.TimeTableArtist.Member.service.MemberService;
+import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFullResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
+import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableResponseWithLikeDto;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +31,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,6 +41,8 @@ public class TimetableService {
 
     private final TimetableRepository timetableRepository;
     private final MemberRepository memberRepository;
+    private final TableLikeService tableLikeService;
+    private final ClassService classService;
     private final ClassRepository classRepository;
     private final CommentService commentService;
     private final SpecialCommentRepository specialCommentRepository;
@@ -44,10 +56,7 @@ public class TimetableService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계정입니다."));
 
         return timetableRepository.save(
-                Timetable.builder()
-                        .owner(owner)
-                        .classList(null)
-                        .build()
+                new Timetable(owner)
         );
     }
 
@@ -58,11 +67,29 @@ public class TimetableService {
         timetableRepository.delete(timetable);
     }
 
-    // 댓글 기능에서 사용
+    // ID를 기준으로 시간표 데이터를 찾아오는 메소드
+    // reply 및 showTimetable 메소드에서 사용
     @Transactional(readOnly = true)
     public Timetable findTimetableById(Long timetableId){
         return timetableRepository.findById(timetableId)
                 .orElseThrow(()->new EntityNotFoundException("해당 시간표가 존재하지 않습니다."));
+    }
+
+    // 전체 시간표 조회 (사용자가 좋아요한 시간표 포함)
+    @Transactional(readOnly = true)
+    public List<TimetableResponseWithLikeDto> getAllTimetablesWithLikeStatus(Long memberId) {
+        List<Timetable> allTimetables = timetableRepository.findAll();
+
+        List<TimetableResponseWithLikeDto> responseList = new ArrayList<>();
+        for (Timetable timetable : allTimetables) {
+            boolean isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
+            long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
+            String tableType = "";
+            String tableImg = "";
+            responseList.add(TimetableResponseWithLikeDto.from(timetable, isLiked, tableType, tableImg, likeCount));
+        }
+
+        return responseList;
     }
 
     public ClassListDto scoreTimetable(Long timetableId) {
@@ -151,5 +178,21 @@ public class TimetableService {
         return classList.stream()
                 .map(ClassDto::from)
                 .collect(Collectors.toList());
+    
+    // 내 시간표 조회에 사용
+    public TimetableFullResponseDto showTimetable(Long timetableId) {
+        // timetableId를 기준으로 Timetable 하나 찾아오기
+        Timetable timetable = findTimetableById(timetableId);
+
+        // timetableId를 기준으로, 이 시간표에 속한 모든 수업들의 정보를 담은 DTO 리스트 받아오기
+        List<ClassDto> classList = classService.findClassesByTimetableId(timetableId);
+
+        // 찾아온 데이터를 DTO에 넣어 리턴
+        return TimetableFullResponseDto.builder()
+                .memberId(timetable.getOwner().getMemberId())
+                .timetableId(timetable.getTimetableId())
+                .createdAt(timetable.getCreatedAt())
+                .classList(classList)
+                .build();
     }
 }

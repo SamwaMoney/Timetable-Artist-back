@@ -32,16 +32,17 @@ public class Class {
     @Column(nullable = false)
     private Weekday weekday;
 
-    @Column(nullable = false)
+    // 비대면 강의를 고려하여 null=true로 수정
+    @Column(nullable = true)
     private Long startH;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long startM;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long endH;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long endM;
 
     @Builder
