@@ -10,7 +10,7 @@ import lombok.Setter;
 public class TimetableResponseWithLikeDto {
     private Long timetableId;
     private String ownerUsername;
-    private Long ranking;
+    private boolean ranking;
     private Long score;
     private String tableType;
     private String tableImg;
@@ -35,7 +35,7 @@ public class TimetableResponseWithLikeDto {
         TimetableResponseWithLikeDto dto = new TimetableResponseWithLikeDto();
         dto.setTimetableId(timetable.getTimetableId());
         dto.setOwnerUsername(timetable.getOwner().getUsername());
-        dto.setRanking(timetable.getRanking());
+        dto.setRanking(timetable.isRanking());
         dto.setScore(timetable.getScore());
         dto.setLikeCount(likeCount);
 //        dto.setReplyCount(timetable.getReplyCount());
