@@ -60,7 +60,7 @@ jobs:
         aws deploy push \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --ignore-hidden-files \
-          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip \
+          --s3-location s3://samwamoney-github-actions-s3-bucket/$GITHUB_SHA.zip \
           --source .
           
     - name: Deploy to AWS EC2 from S3
