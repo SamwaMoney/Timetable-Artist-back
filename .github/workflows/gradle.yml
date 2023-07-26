@@ -47,11 +47,6 @@ jobs:
       with:
         gradle-version: 8.2.1
         arguments: build
-        
-    - name: Build with Gradle2
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        arguments: clean build -x test
       
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
