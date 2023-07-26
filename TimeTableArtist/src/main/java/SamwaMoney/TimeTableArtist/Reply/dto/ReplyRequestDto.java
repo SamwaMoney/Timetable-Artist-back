@@ -13,12 +13,16 @@ import lombok.NoArgsConstructor;
 public class ReplyRequestDto {
     private Long memberId;
     private String content;
+    private boolean nameHide;
 
-    public Reply toEntity(Timetable timetable, Member writer, boolean heart, Integer replyLikeCount){
+    public Reply toEntity(Timetable timetable, Member writer, String replyName, boolean heart, Integer replyLikeCount){
+
         return Reply.builder()
                 .timetable(timetable)
                 .writer(writer)
                 .content(this.content)
+                .nameHide(this.nameHide)
+                .replyName(replyName)
                 .heart(heart)
                 .replyLikeCount(replyLikeCount)
                 .build();

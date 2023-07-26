@@ -33,9 +33,15 @@ public class Reply extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
+    @ColumnDefault("false") // true일 때 익명
+    private boolean nameHide;
+
+    @Column
+    private String replyName;
+
+    @Column(nullable = false)
     @ColumnDefault("false") // like 값이 false면 좋아요 누르지 않은 상태
-    public
-    boolean heart;
+    public boolean heart;
 
     @Column(nullable = false)
     @ColumnDefault("0")
@@ -50,10 +56,12 @@ public class Reply extends BaseTimeEntity {
     }
 
     @Builder
-    public Reply(Timetable timetable, Member writer, String content, boolean heart, Integer replyLikeCount) {
+    public Reply(Timetable timetable, Member writer, String content, boolean nameHide, String replyName, boolean heart, Integer replyLikeCount) {
         this.timetable = timetable;
         this.writer = writer;
         this.content = content;
+        this.nameHide = nameHide;
+        this.replyName = replyName;
         this.heart = heart;
         this.replyLikeCount = replyLikeCount;
     }

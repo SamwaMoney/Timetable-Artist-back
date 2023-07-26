@@ -30,6 +30,7 @@ public class TimetableRepliesResponseDto {
         private Long timetableId;
         private Long memberId;
         private String content;
+        private String replyName;
         private LocalDateTime createdAt;
         private boolean heart;
         private Integer replyLikeCount;
@@ -39,6 +40,7 @@ public class TimetableRepliesResponseDto {
             this.timetableId = reply.getTimetable().getTimetableId();
             this.memberId = reply.getWriter().getMemberId();
             this.content = reply.getContent();
+            this.replyName = reply.getReplyName();
             this.createdAt = reply.getCreatedAt();
             this.heart = reply.isHeart();
             this.replyLikeCount = reply.getReplyLikeCount();
