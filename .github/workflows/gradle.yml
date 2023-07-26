@@ -42,7 +42,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - run: gradle init
     
-    - name: Build with Gradle1
+    - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 8.2.1
@@ -55,15 +55,15 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{env.AWS_REGION }}
     - name: Upload to AWS S3
-      run:
+      run: |
         aws deploy push \
-          --application-name samwamoney-codedeploy-app \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --ignore-hidden-files \
           --s3-location s3://$S3BUCKET_NAME/$GITHUB_SHA.zip \
           --source .
           
     - name: Deploy to AWS EC2 from S3
-      run: \
+      run: |
         aws deploy create-deployment \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
