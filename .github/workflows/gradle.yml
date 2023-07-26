@@ -1,112 +1,72 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
-name: Java CI with Gradle
+name: Deploy to Amazon EC2
 
 on:
   push:
     branches: [ "main" ]
 
+env:
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: samwamoney-github-actions-s3-bucket
+  CODE_DEPLOY_APPLICATION_NAME: samwamoney-codedeploy-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: samwamoney-codedeploy-deployment-group
+  APPLICATION: ${{ secrets.APPLICATION_SECRET_YML }}
+  
 permissions:
   contents: read
-
+  
 jobs:
-  CI-CD:
-
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-    env :
-      working-directory: ./
-      APPLICATION: ${{ secrets.APPLICATION_SECRET_YML }}
-
+    environment: production
+    
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-
-      ## gradle caching
-      - name: Gradle Caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - uses: actions/checkout@v2
-      - run: touch ./src/main/resources/application.yml
-      - run: echo "${{ env.APPLICATION }}" > ./src/main/resources/application-secret.yml
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: application-secret.yml
-          path: ./src/main/resources/application-secret.yml
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Build with Gradle
-        run: ./gradlew bootJar
-
-
-      - name: Cleanup Gradle Cache
-        if: ${{ always() }}
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/timetableartist:latest
-
-      - name: Get Github Actions IP
-        id: ip
-        uses: haythem/public-ip@v1.3
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-
-      - name: Add Github Actions IP to Security group
-        run: |
-          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_SERVER_HOST }}
-          port: 22
-          username: ubuntu
-          key: ${{ secrets.PRIVATE_KEY }}
-          envs: GITHUB_SHA
-          script: |
-            sudo docker stop samwaspring && sudo docker rm samwaspring
-            sudo docker rmi -f timetableartist
-            sudo docker pull  ${{ secrets.DOCKERHUB_USERNAME }}/timetableartist
-            sudo docker run -d --name samwaspring --cpu-shares 512 --memory="1g" -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/timetableartist
-
-      - name: Remove Github Actions IP From Security Group
-        run: |
-           aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        
+    - uses: actions/checkout@v2
+    - run: touch ./TimeTableArtist/src/main/resources/application.yml
+    - run: echo "${{env.APPLICATION}}" > ./TimeTableArtist/src/main/resources/application.yml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: application-secret.yml
+        path: ./TimeTableArtist/src/main/resources/application.yml
+    
+    - name: init with Gradle
+      uses: gradle/gradle-build-action@v2
+    - run: gradle init
+    
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 8.2.1
+        arguments: build
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{env.AWS_REGION }}
+        
+    - name: Upload to AWS S3
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://samwamoney-github-actions-s3-bucket/$GITHUB_SHA.zip \
+          --source .
+          
+    - name: Deploy to AWS EC2 from S3
+      run: |
+        aws deploy create-deployment \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip

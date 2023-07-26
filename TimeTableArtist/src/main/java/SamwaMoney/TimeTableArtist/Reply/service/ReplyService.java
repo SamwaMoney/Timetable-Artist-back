@@ -6,8 +6,11 @@ import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.repository.ReplyRepository;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
+import SamwaMoney.TimeTableArtist.Timetable.service.AllClassAlgoService;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,27 +22,25 @@ import java.util.List;
 @AllArgsConstructor
 public class ReplyService {
     private final ReplyRepository replyRepository;
-    private final TimetableService timetableService;
     private final MemberService memberService;
+    private final AllClassAlgoService allClassAlgoService;
+    @Autowired
+    @Lazy
+    private TimetableService timetableService;
 
     public Long createReply(Long timetableId, ReplyRequestDto requestDto) {
         Timetable timetable = timetableService.findTimetableById(timetableId);
         Member writer = memberService.findMemberById(requestDto.getMemberId());
-        return replyRepository.save(requestDto.toEntity(timetable, writer)).getReplyId();
+        boolean isHeart = false;
+        Integer replyLikeCount = 0;
+        return replyRepository.save(requestDto.toEntity(timetable, writer, isHeart, replyLikeCount)).getReplyId();
     }
 
     @Transactional(readOnly = true)
     public List<Reply> findReplyListByTimetable(Long timetableId){
         Timetable timetable = timetableService.findTimetableById(timetableId);
-        return replyRepository.findAllByTimetable(timetable);
+        return replyRepository.findAllByTimetableOrderByReplyLikeCountDesc(timetable);
     }
-
-    //replylike 구현 이후 완성할 부분
-    //@Transactional l(readOnly = true)
-    //public int getReviewCount(Long storeId) {
-    //    int replylikeCount = replylikeRepository.countByStoreStoreId(storeId);
-    //    return reviewCount;
-    //}
 
     @Transactional(readOnly = true)
     public Reply findReplyById(Long replyId){
@@ -52,3 +53,4 @@ public class ReplyService {
         replyRepository.delete(reply);
     }
 }
+

@@ -25,7 +25,8 @@ public class ReplyLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member owner;
+    private Member owner; //로그인한 사용자
+
 
     @Builder
     public ReplyLike(Reply reply, Member owner) {

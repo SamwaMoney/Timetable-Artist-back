@@ -1,34 +1,34 @@
 package SamwaMoney.TimeTableArtist.TimetableImg.domain;
 
-import SamwaMoney.TimeTableArtist.Class.domain.Weekday;
+import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="TimetableImg")
 @Getter
-@Setter
-public class TimetableImg {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class TimetableImg extends BaseTimeEntity {
+
     @Id
-    @GeneratedValue
-    @Column(name="timetableImg_id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "timetable_img_id", nullable = false, updatable = false)
+    private Long timetableImgId;
 
-    @Column(nullable = false)
-    private String imgUrl;
+    // 이미지 URL을 저장할 필드
+    private String imageUrl;
 
-    //class랑 매핑하기
-    @OneToOne
-    @JoinColumn(name="class_id")
-    private Class class;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "timetable_id", nullable = false, updatable = false)
+    private Timetable timetable;
 
     @Builder
-    public TimetableImg(Long id, String imgUrl){
-        this.id = id;
-        this.imgUrl = imgUrl;
+    public TimetableImg(String imageUrl, Timetable timetable) {
+        this.imageUrl = imageUrl;
+        this.timetable = timetable;
     }
 }
