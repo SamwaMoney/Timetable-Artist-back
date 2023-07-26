@@ -178,7 +178,7 @@ public class TimetableService {
         return classList.stream()
                 .map(ClassDto::from)
                 .collect(Collectors.toList());
-    
+    }
     // 내 시간표 조회에 사용
     public TimetableFullResponseDto showTimetable(Long timetableId) {
         // timetableId를 기준으로 Timetable 하나 찾아오기

@@ -31,6 +31,7 @@ public class Timetable extends BaseTimeEntity {
     @OneToMany(mappedBy = "timetable")
     private List<Class> classList = new ArrayList<>();
 
+    @Setter
     @Column(nullable = false)
     private Long score;
 
