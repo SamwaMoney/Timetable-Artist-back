@@ -6,7 +6,7 @@ server:
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     generate-ddl: false
     show-sql: false
   mvc:
