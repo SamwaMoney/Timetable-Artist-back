@@ -30,6 +30,15 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         
+    - name: init with Gradle
+      uses: gradle/gradle-build-action@v2
+    - run: gradle init
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 8.1.1
+        arguments: build
+        
     - uses: actions/checkout@v2
     - run: touch ./TimeTableArtist/src/main/resources/application.yml
     - run: echo "${{env.APPLICATION}}" > ./TimeTableArtist/src/main/resources/application.yml
