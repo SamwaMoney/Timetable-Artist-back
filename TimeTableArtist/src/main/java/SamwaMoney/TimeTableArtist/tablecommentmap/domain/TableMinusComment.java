@@ -16,7 +16,7 @@ public class TableMinusComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "table_minuscomment_id", nullable = false, updatable = false)
-    private Long tablePlusCommentId;
+    private Long tableMinusCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="timetable_id")
