@@ -27,7 +27,7 @@ public class RankingboardGetResponseDto {
         this.isLiked = isLiked;
     }
 
-    public static RankingboardGetResponseDto from(Timetable timetable, boolean isLiked) {
+    public static RankingboardGetResponseDto from(Timetable timetable) {
         RankingboardGetResponseDto dto = new RankingboardGetResponseDto();
         dto.setTimetableId(timetable.getTimetableId());
         dto.setUsername(timetable.getOwner().getUsername());
@@ -38,7 +38,7 @@ public class RankingboardGetResponseDto {
         dto.setTableTypeContent(timetable.getTableTypeContent());
         dto.setLikeCount(timetable.getLikeCount());
         dto.setReplyCount(timetable.getReplyCount());
-        dto.setIsLiked(isLiked);
+        dto.setIsLiked(timetable.isLiked());
         return dto;
     }
 

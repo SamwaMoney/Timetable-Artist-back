@@ -212,7 +212,7 @@ public class TimetableService {
 
     // 랭킹보드 조회
     @Transactional(readOnly = true)
-    public List<RankingboardGetResponseDto> getRankingboardTimetables(Long memberId, String sortType) {
+    public List<RankingboardGetResponseDto> getRankingboardTimetables(String sortType) {
         List<Timetable> allTimetables = timetableRepository.findAll(Sort.by(Sort.Direction.DESC, "score"));
 
         if (sortType.equals("LOWEST")) {
@@ -223,9 +223,7 @@ public class TimetableService {
 
         List<RankingboardGetResponseDto> responseList = new ArrayList<>();
         for (Timetable timetable : allTimetables) {
-            boolean isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
-            long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
-            responseList.add(RankingboardGetResponseDto.from(timetable, isLiked));
+            responseList.add(RankingboardGetResponseDto.from(timetable));
         }
 
         return responseList;
