@@ -7,6 +7,7 @@ import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
 import SamwaMoney.TimeTableArtist.Class.dto.MoveDto;
 import SamwaMoney.TimeTableArtist.Class.repository.ClassRepository;
 import SamwaMoney.TimeTableArtist.Comment.Service.CommentService;
+import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
@@ -198,11 +199,20 @@ public class TimetableService {
     @Transactional
     public RankingResponseDto updateByRankingReqDto(Long timetableId, RankingRequestDto rankingRequestDto, String fileUrl){
         Timetable timetable = timetableRepository.findByTimetableId(timetableId);
-        timetable.uploadToBoard(rankingRequestDto, fileUrl);
+        String tableTypeContent = readTableTypeContent(timetableId);
+        timetable.uploadToBoard(rankingRequestDto, fileUrl, tableTypeContent);
         timetableRepository.save(timetable);
 
         return RankingResponseDto.builder()
                 .timetable(timetable)
                 .build();
+    }
+
+    public String readTableTypeContent(Long timetableId) {
+        Timetable timetable = timetableRepository.findByTimetableId(timetableId);
+        Long specialCommentId = timetable.getTableType();
+        SpecialComment specialComment = specialCommentRepository.findBySpecialCommentId(specialCommentId);
+        String tableTypeContent = specialComment.getContent();
+        return tableTypeContent;
     }
 }
