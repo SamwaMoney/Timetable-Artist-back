@@ -88,6 +88,7 @@ public class TimetableController {
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<RankingResponseDto> uploadToBoard(@PathVariable Long timetableId, @RequestPart(value = "image") MultipartFile image, @RequestPart(value = "dto") RankingRequestDto rankingReqDto) throws IOException {
         String fileUrl = s3Uploader.upload(image, "image");  // request에서 받아온 image를 s3에 업로드
+        String tableTypeContent = timetableService.readTableTypeContent(timetableId);
         RankingResponseDto rankingResponseDto = timetableService.updateByRankingReqDto(timetableId, rankingReqDto, fileUrl);
         return ResponseEntity.ok(rankingResponseDto);
     }

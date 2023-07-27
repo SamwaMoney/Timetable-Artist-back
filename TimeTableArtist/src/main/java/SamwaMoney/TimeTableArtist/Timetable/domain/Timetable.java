@@ -71,9 +71,12 @@ public class Timetable extends BaseTimeEntity {
     @Setter
     private Long replyCount;
 
+    @Setter
+    private String tableTypeContent;
+
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, Long likeCount, long replyCount) {
+                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, Long likeCount, long replyCount, String tableTypeContent) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -82,8 +85,10 @@ public class Timetable extends BaseTimeEntity {
         this.specialComments = specialComments;
         this.ranking = ranking;
         this.classHide = classHide;
+        this.imgUrl = imgUrl;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
+        this.tableTypeContent = tableTypeContent;
     }
 
     // 빈 시간표를 만드는 생성자
@@ -99,9 +104,10 @@ public class Timetable extends BaseTimeEntity {
     }
 
     // 랭킹보드 게시
-    public void uploadToBoard(RankingRequestDto rankingRequestDto, String fileUrl){
+    public void uploadToBoard(RankingRequestDto rankingRequestDto, String fileUrl, String tableTypeContent){
         this.classHide = rankingRequestDto.isClassHide();
         this.ranking = rankingRequestDto.isRanking();
         this.imgUrl = fileUrl;
+        this.tableTypeContent = tableTypeContent;
     }
 }
