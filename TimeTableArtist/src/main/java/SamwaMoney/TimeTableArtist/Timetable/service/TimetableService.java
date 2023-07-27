@@ -13,9 +13,7 @@ import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
 import SamwaMoney.TimeTableArtist.Member.service.MemberService;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
-import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFullResponseDto;
-import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
-import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableResponseWithLikeDto;
+import SamwaMoney.TimeTableArtist.Timetable.dto.*;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -178,7 +176,7 @@ public class TimetableService {
         return classList.stream()
                 .map(ClassDto::from)
                 .collect(Collectors.toList());
-    
+    }
     // 내 시간표 조회에 사용
     public TimetableFullResponseDto showTimetable(Long timetableId) {
         // timetableId를 기준으로 Timetable 하나 찾아오기
@@ -193,6 +191,18 @@ public class TimetableService {
                 .timetableId(timetable.getTimetableId())
                 .createdAt(timetable.getCreatedAt())
                 .classList(classList)
+                .build();
+    }
+
+    // 랭킹보드 게시
+    @Transactional
+    public RankingResponseDto updateByRankingReqDto(Long timetableId, RankingRequestDto rankingRequestDto, String fileUrl){
+        Timetable timetable = timetableRepository.findByTimetableId(timetableId);
+        timetable.uploadToBoard(rankingRequestDto, fileUrl);
+        timetableRepository.save(timetable);
+
+        return RankingResponseDto.builder()
+                .timetable(timetable)
                 .build();
     }
 }
