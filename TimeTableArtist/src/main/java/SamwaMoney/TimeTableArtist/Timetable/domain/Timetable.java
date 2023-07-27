@@ -101,6 +101,8 @@ public class Timetable extends BaseTimeEntity {
         this.specialComments = new ArrayList<>();
         this.ranking = false;
         this.classHide = false;
+        this.likeCount = 0L;
+        this.replyCount = 0L;
     }
 
     // 랭킹보드 게시

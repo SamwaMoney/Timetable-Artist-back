@@ -1,12 +1,10 @@
 package SamwaMoney.TimeTableArtist.Timetable.controller;
 
-import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Class.service.ClassService;
 import SamwaMoney.TimeTableArtist.Global.service.S3Uploader;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
-import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFindResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableFullResponseDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableRequestDto;
 import SamwaMoney.TimeTableArtist.Timetable.dto.TimetableResponseDto;
@@ -91,5 +89,16 @@ public class TimetableController {
         String tableTypeContent = timetableService.readTableTypeContent(timetableId);
         RankingResponseDto rankingResponseDto = timetableService.updateByRankingReqDto(timetableId, rankingReqDto, fileUrl);
         return ResponseEntity.ok(rankingResponseDto);
+    }
+
+    // 랭킹보드 조회
+    @GetMapping("/rankingboard")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<RankingboardGetResponseDto> getRankingboard(@RequestParam("sortType") String sortType, @RequestBody TimetableRankingRequestDto timetableRankingRequestDto) {
+        Long memberId = timetableRankingRequestDto.getMemberId();
+
+        List<RankingboardGetResponseDto> rankingboard = timetableService.getRankingboardTimetables(memberId, sortType);
+
+        return rankingboard;
     }
 }
