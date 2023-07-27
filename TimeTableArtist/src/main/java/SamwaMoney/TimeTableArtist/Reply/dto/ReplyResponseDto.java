@@ -13,6 +13,8 @@ public class ReplyResponseDto {
     private Long memberId;
     private Long timetableId;
     private String content;
+    private boolean nameHide;
+    private String replyName;
     private LocalDateTime createdAt;
     private boolean heart;
     private Integer replyLikeCount;
@@ -23,6 +25,9 @@ public class ReplyResponseDto {
                 .timetableId(reply.getTimetable().getTimetableId())
                 .memberId(reply.getWriter().getMemberId())
                 .content(reply.getContent())
+                .nameHide(reply.isNameHide())
+                .replyName(reply.getReplyName())
+                .replyName(reply.getReplyName())
                 .createdAt(reply.getCreatedAt())
                 .heart(reply.isHeart())
                 .replyLikeCount(reply.getReplyLikeCount())
