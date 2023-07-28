@@ -7,6 +7,9 @@ import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
 import SamwaMoney.TimeTableArtist.Class.dto.MoveDto;
 import SamwaMoney.TimeTableArtist.Class.repository.ClassRepository;
 import SamwaMoney.TimeTableArtist.Comment.Service.CommentService;
+import SamwaMoney.TimeTableArtist.Comment.dto.CommentResponseDto;
+import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
+import SamwaMoney.TimeTableArtist.Comment.entity.PlusComment;
 import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
@@ -16,10 +19,14 @@ import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
 import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
+import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
+import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
+import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import javax.xml.stream.events.Comment;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,12 +193,30 @@ public class TimetableService {
         // timetableId를 기준으로, 이 시간표에 속한 모든 수업들의 정보를 담은 DTO 리스트 받아오기
         List<ClassDto> classList = classService.findClassesByTimetableId(timetableId);
 
+        // timeTable 객체에 있는 정보를 바탕으로, 해당하는 코멘트들의 내용 모두 불러오기
+        List<CommentResponseDto> plusComments = new ArrayList<>();
+        for(TablePlusComment t : timetable.getPlusComments()) {
+            PlusComment comment = t.getPlusComment();
+            plusComments.add(new CommentResponseDto(comment));
+        }
+        List<CommentResponseDto> minusComments = new ArrayList<>();
+        for(TableMinusComment t : timetable.getMinusComments()) {
+            MinusComment comment = t.getMinusComment();
+            minusComments.add(new CommentResponseDto(comment));
+        }
+        List<CommentResponseDto> specialComments = new ArrayList<>();
+        for(TableSpecialComment t : timetable.getSpecialComments()) {
+            SpecialComment comment = t.getSpecialComment();
+            specialComments.add(new CommentResponseDto(comment));
+        }
+
         // 찾아온 데이터를 DTO에 넣어 리턴
         return TimetableFullResponseDto.builder()
-                .memberId(timetable.getOwner().getMemberId())
-                .timetableId(timetable.getTimetableId())
-                .createdAt(timetable.getCreatedAt())
+                .table(timetable)
                 .classList(classList)
+                .plusComments(plusComments)
+                .minusComments(minusComments)
+                .specialComments(specialComments)
                 .build();
     }
 
