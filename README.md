@@ -16,7 +16,7 @@
 
 ## 🔨 개발
 
-### 실행
+### ⚙ 실행
 git clone   
 
 ### ⚙ 기술 스택      
@@ -27,6 +27,9 @@ git clone
 랜딩페이지 /  
 로그인 /login  
 
+### 📁 API 명세서
+
 # ✨ 주요기능 소개  
 
-# 📲 와이어프레임  
+# 📲 와이어프레임    
+![sws와이어프레임](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/47b0a2cb-b9bf-435c-bbb2-308a49924a86)
