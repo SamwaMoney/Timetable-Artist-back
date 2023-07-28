@@ -1,4 +1,4 @@
-# Time-Table-Artist-back
+![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/1f5ffc95-453e-4c57-adbe-3c3cfaafe91d) # 대학생들을 위한 시간표 채점 & 공유 서비스, 시간표 아티스트
 전 수강신청 망한 대학생이 아니라 시간표 아티스트에요
 
 ## ⏰ 프로젝트 소개  
