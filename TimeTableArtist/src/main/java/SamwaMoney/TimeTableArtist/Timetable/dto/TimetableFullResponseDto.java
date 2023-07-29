@@ -17,14 +17,20 @@ public class TimetableFullResponseDto {
 
     private Long memberId;
     private Long timetableId;
+    private String owner;
+    private Long likeCount;
     private LocalDateTime createdAt;
 
     private List<ClassDto> classList;
 
+
+
     @Builder
-    public TimetableFullResponseDto(Long memberId, Long timetableId, LocalDateTime createdAt, List<ClassDto> classList) {
+    public TimetableFullResponseDto(Long memberId, Long timetableId, String owner, Long likeCount, LocalDateTime createdAt, List<ClassDto> classList) {
         this.memberId = memberId;
         this.timetableId = timetableId;
+        this.owner = owner;
+        this.likeCount = likeCount;
         this.createdAt = createdAt;
         this.classList = classList;
     }

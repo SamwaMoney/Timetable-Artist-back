@@ -11,6 +11,7 @@ import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
+import SamwaMoney.TimeTableArtist.TableLike.domain.TableLike;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
@@ -172,10 +173,12 @@ public class TimetableService {
                 .map(ClassDto::from)
                 .collect(Collectors.toList());
     }
+
     // 내 시간표 조회에 사용
     public TimetableFullResponseDto showTimetable(Long timetableId) {
         // timetableId를 기준으로 Timetable 하나 찾아오기
         Timetable timetable = findTimetableById(timetableId);
+
 
         // timetableId를 기준으로, 이 시간표에 속한 모든 수업들의 정보를 담은 DTO 리스트 받아오기
         List<ClassDto> classList = classService.findClassesByTimetableId(timetableId);
@@ -184,6 +187,8 @@ public class TimetableService {
         return TimetableFullResponseDto.builder()
                 .memberId(timetable.getOwner().getMemberId())
                 .timetableId(timetable.getTimetableId())
+                .owner(timetable.getOwner().getUsername())
+                .likeCount(timetable.getLikeCount())
                 .createdAt(timetable.getCreatedAt())
                 .classList(classList)
                 .build();
