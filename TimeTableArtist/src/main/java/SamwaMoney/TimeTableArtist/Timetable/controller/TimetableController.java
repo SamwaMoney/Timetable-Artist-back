@@ -2,6 +2,7 @@ package SamwaMoney.TimeTableArtist.Timetable.controller;
 
 import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Class.service.ClassService;
+import SamwaMoney.TimeTableArtist.Global.service.S3Uploader;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
@@ -13,9 +14,12 @@ import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,7 @@ public class TimetableController {
     private final TimetableRepository timetableRepository;
     private final ClassService classService;
     private final TableLikeService tableLikeService;
+    private final S3Uploader s3Uploader;
 
     // 시간표 생성
     @PostMapping
@@ -76,5 +81,15 @@ public class TimetableController {
         }
 
         return timetablesWithLikeStatus;
+    }
+
+    // 랭킹보드 게시
+    @PutMapping(value = "{timetableId}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<RankingResponseDto> uploadToBoard(@PathVariable Long timetableId, @RequestPart(value = "image") MultipartFile image, @RequestPart(value = "dto") RankingRequestDto rankingReqDto) throws IOException {
+        String fileUrl = s3Uploader.upload(image, "image");  // request에서 받아온 image를 s3에 업로드
+        String tableTypeContent = timetableService.readTableTypeContent(timetableId);
+        RankingResponseDto rankingResponseDto = timetableService.updateByRankingReqDto(timetableId, rankingReqDto, fileUrl);
+        return ResponseEntity.ok(rankingResponseDto);
     }
 }

@@ -15,5 +15,5 @@ public interface TimetableRepository extends JpaRepository<Timetable, Long> {
     Optional<Timetable> findByTimetableIdAndOwner(Long timetableId, Long memberId);
     List<Class> findAllByTimetableId(Long timetableId);
     Optional<Timetable> findById(Long timetableId);
-
+    Timetable findByTimetableId (Long timetableId);
 }

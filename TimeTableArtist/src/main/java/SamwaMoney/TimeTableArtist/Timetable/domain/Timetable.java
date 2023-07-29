@@ -3,7 +3,7 @@ package SamwaMoney.TimeTableArtist.Timetable.domain;
 import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Class.domain.Class;
-import SamwaMoney.TimeTableArtist.TimetableImg.domain.TimetableImg;
+import SamwaMoney.TimeTableArtist.Timetable.dto.RankingRequestDto;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
@@ -47,10 +47,16 @@ public class Timetable extends BaseTimeEntity {
     @OneToMany(mappedBy = "timetable")
     private List<TableSpecialComment> specialComments = new ArrayList<>();
 
-    private Long ranking;
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean ranking;
 
     @Column(nullable = false)
-    private Boolean classHide;
+    @ColumnDefault("false")
+    private boolean classHide;
+
+    @Column
+    private String imgUrl;
 
     @Setter
     private boolean isLiked;
@@ -65,15 +71,12 @@ public class Timetable extends BaseTimeEntity {
     @Setter
     private Long replyCount;
 
-
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "timetable_img_id")
-    private TimetableImg timetableImg;
+    @Setter
+    private String tableTypeContent;
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, Long ranking, Boolean classHide, Long likeCount, long replyCount) {
+                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, Long likeCount, long replyCount, String tableTypeContent) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -82,8 +85,10 @@ public class Timetable extends BaseTimeEntity {
         this.specialComments = specialComments;
         this.ranking = ranking;
         this.classHide = classHide;
+        this.imgUrl = imgUrl;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
+        this.tableTypeContent = tableTypeContent;
     }
 
     // 빈 시간표를 만드는 생성자
@@ -94,7 +99,15 @@ public class Timetable extends BaseTimeEntity {
         this.plusComments = new ArrayList<>();
         this.minusComments = new ArrayList<>();
         this.specialComments = new ArrayList<>();
-        this.ranking = null;
+        this.ranking = false;
         this.classHide = false;
+    }
+
+    // 랭킹보드 게시
+    public void uploadToBoard(RankingRequestDto rankingRequestDto, String fileUrl, String tableTypeContent){
+        this.classHide = rankingRequestDto.isClassHide();
+        this.ranking = rankingRequestDto.isRanking();
+        this.imgUrl = fileUrl;
+        this.tableTypeContent = tableTypeContent;
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final MemberService memberService;
-    private final AllClassAlgoService allClassAlgoService;
+
     @Autowired
     @Lazy
     private TimetableService timetableService;
@@ -31,9 +31,23 @@ public class ReplyService {
     public Long createReply(Long timetableId, ReplyRequestDto requestDto) {
         Timetable timetable = timetableService.findTimetableById(timetableId);
         Member writer = memberService.findMemberById(requestDto.getMemberId());
+        boolean nameHide = requestDto.isNameHide();
+        String name = writer.getUsername();
+        String replyName = selectName(nameHide, name);
+
         boolean isHeart = false;
         Integer replyLikeCount = 0;
-        return replyRepository.save(requestDto.toEntity(timetable, writer, isHeart, replyLikeCount)).getReplyId();
+        return replyRepository.save(requestDto.toEntity(timetable, writer, replyName, isHeart, replyLikeCount)).getReplyId();
+    }
+
+    // 익명 설정 여부에 따라 해당 댓글의 작성자 익명 표시
+    public static String selectName(boolean hide, String username){
+        if (hide){
+            return "익명";
+        }
+        else {
+            return username;
+        }
     }
 
     @Transactional(readOnly = true)
