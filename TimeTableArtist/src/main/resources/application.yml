@@ -6,7 +6,6 @@ server:
     include-message: always
     include-binding-errors: always
 
-
 spring:
   jpa:
     hibernate:
