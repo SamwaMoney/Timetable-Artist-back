@@ -2,6 +2,7 @@ server:
   servlet:
     encoding:
       force-response: true
+      
   error:
     include-message: always
     include-binding-errors: always
