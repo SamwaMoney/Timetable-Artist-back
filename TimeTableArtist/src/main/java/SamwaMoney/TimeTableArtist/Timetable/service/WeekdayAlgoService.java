@@ -21,7 +21,7 @@ public class WeekdayAlgoService {
     public static int maxInARowCnt;
     public static int totalScore;
 
-    public static int weekdayAlgo(ClassListDto classListDto, Map<List<String>, MoveDto> moveDifficulty, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
+    public static Map<String, Integer> weekdayAlgo(ClassListDto classListDto, Map<List<String>, MoveDto> moveDifficulty, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
 
         score = new HashMap<>(); // key: 감/가점 요인, value: 감/가점된 점수
         sevenCnt = 0; // 7교시 수
@@ -93,7 +93,7 @@ public class WeekdayAlgoService {
         System.out.println("요일별 점수 계산:" + score);
         System.out.println("요일별 계산에 의한 총 점수: " + totalScore);
 
-        return totalScore;
+        return score;
     }
 
     public static ArrayList<Integer> pickThree(ArrayList<Integer> list) {

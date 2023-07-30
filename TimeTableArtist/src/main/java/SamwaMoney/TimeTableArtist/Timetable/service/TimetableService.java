@@ -159,14 +159,31 @@ public class TimetableService {
         ArrayList<Integer> minusCommentIds = commentService.getAllMinusCommentIds();
         ArrayList<Integer> specialCommentIds = commentService.getAllSpecialCommentIds();
 
+        // 댓글 데이터 가져온 후 출력하여 확인
+        System.out.println("After fetching comments:");
         System.out.println("plusComments: " + plusCommentIds);
         System.out.println("minusComments: " + minusCommentIds);
         System.out.println("specialComments: " + specialCommentIds);
 
         int score;
-        int score1 = AllClassAlgoService.allClassAlgo(classListDto, plusCommentIds, minusCommentIds, specialCommentIds);
-        int score2 = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
-        score = 60 + score1 + score2;
+
+        // AllClassAlgo에서 결과값 얻기
+        Map<String, ArrayList<Integer>> result = new HashMap<>();
+        AllClassAlgoService.allClassAlgo(classListDto, plusCommentIds, minusCommentIds, specialCommentIds, result);
+        int score1 = result.get("score");
+        ArrayList<Integer> good1 = result.get("goodComments");
+        ArrayList<Integer> bad1 = result.get("badComments");
+        ArrayList<Integer> special1 = result.get("specialComments");
+
+        System.out.println("AllClassAlgo에서 결과값은: " + score1);
+        System.out.println("AllClassAlgo에서 선정된 good comment는: " + good1);
+        System.out.println("AllClassAlgo에서 선정된 bad comment는: " + bad1);
+        System.out.println("AllClassAlgo에서 선정된 special comment는: " + special1);
+
+//        int score2 = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
+//        Map<String, Integer> weekdayResult = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
+//        int score2 =
+         score = 60 + score1;
         if (score < 0) {
             score = 0;
         } else if (score > 100) {

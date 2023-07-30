@@ -35,11 +35,11 @@ public class Timetable extends BaseTimeEntity {
     @Column(nullable = false)
     private Long score;
 
-    @OneToMany(mappedBy = "timetable")
-    private List<TablePlusComment> plusComments = new ArrayList<>();
-
     @Setter
     private Long tableType;
+
+    @OneToMany(mappedBy = "timetable")
+    private List<TablePlusComment> plusComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "timetable")
     private List<TableMinusComment> minusComments = new ArrayList<>();

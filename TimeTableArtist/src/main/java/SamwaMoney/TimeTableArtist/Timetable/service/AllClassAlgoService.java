@@ -3,13 +3,12 @@ package SamwaMoney.TimeTableArtist.Timetable.service;
 import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
 import SamwaMoney.TimeTableArtist.Class.dto.ClassDto;
 import SamwaMoney.TimeTableArtist.Class.service.ClassService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AllClassAlgoService {
@@ -49,7 +48,7 @@ public class AllClassAlgoService {
 
     // 전체 과목 개수 count
     // 수업 7개 미만: 수업 하나당 +1, 원격 비대면일 경우 +7
-    public static int allClassAlgo(ClassListDto t, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
+    public static void allClassAlgo(ClassListDto t, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special, Map<String, ArrayList<Integer>> result) {
         Set<String> allClasses = new HashSet<>(); // 모든 강의 리스트
 
         int allCount = 0; // 모든 강의의 수 저장
@@ -60,6 +59,9 @@ public class AllClassAlgoService {
         int chapelCount = ChapelAlgo(t); // 전체 채플 수
         int locationCount = locationAlgo(t); // 전체 강의실 건물 수
         int firstClassCount = FirstClassAlgo(t, good, bad);
+        ArrayList<Integer> goodComments = new ArrayList<>();
+        ArrayList<Integer> badComments = new ArrayList<>();
+        ArrayList<Integer> specialComments = new ArrayList<>();
 
         for (ClassDto c : t.getClassList()) {
             if ("원격/비대면".equals(c.getLocation()))
@@ -89,36 +91,48 @@ public class AllClassAlgoService {
         score += (online * 3); // 원격/비대면 강의당 3점씩 가점
         System.out.println("강의 개수에 의한 가점은 " + score);
 
-        if(allBlockCount <= 6)
-            special.add(0); // special comment id 0 취미는 학교 다니기
-        else if (allBlockCount >= 14)
-            special.add(1); // special comment id 1 등록금 뿌린 대로 거두자
-
+        if(allBlockCount <= 6) {
+            specialComments.add(0); // special comment id 0 취미는 학교 다니기
+            System.out.println(special);
+        }
+        else if (allBlockCount >= 14) {
+            specialComments.add(1); // special comment id 1 등록금 뿌린 대로 거두자
+            System.out.println(special);
+        }
         if (online >= 3)
-            special.add(2); // special comment id 2 이화 사이버 대학교
+            specialComments.add(2); // special comment id 2 이화 사이버 대학교
+        System.out.println(special);
         if (online >= 2)
-            good.add(10); // good comment id 10 비대면 강의 있음
+            goodComments.add(10); // good comment id 10 비대면 강의 있음
+        System.out.println(special);
 
         if (chapelCount >= 2)
-            special.add(3); // special comment id 3 하나님의 축복이 끝이 없네
+            specialComments.add(3); // special comment id 3 하나님의 축복이 끝이 없네
 
         score += DayoffAlgo(t, good, bad); // 공강 관련 가감점 및 코멘트 처리 함수
         score += FirstClassAlgo(t, good, bad); // 1교시 관련 감점 및 코멘트 처리 함수
 
         if (allAfternoonAlgo(t))
-            special.add(4); // special comment id 4 상여자 특) 점심 먹고 등교함
+            specialComments.add(4); // special comment id 4 상여자 특) 점심 먹고 등교함
 
         if (locationCount == 1){
-            good.add(11); // good comment id 11 나는 한 건물만 판다
-            special.add(13); // special comment id 13 00 건물 지박령 - 교체 예정
+            goodComments.add(11); // good comment id 11 나는 한 건물만 판다
+            specialComments.add(13); // special comment id 13 00 건물 지박령 - 교체 예정
         }
         else if (locationCount >= 4){
-            special.add(8); // special comment id 8 동에 번쩍 서에 번쩍
+            specialComments.add(8); // special comment id 8 동에 번쩍 서에 번쩍
         }
 
         System.out.println("과목의 개수가 " + allCount + "개이고, 원격/온라인 강의의 개수는 " + online +"개 이므로, 총 점수는 " + score);
 
-        return score;
+        // result에 결과값을 삽입
+        result.put("score", score); // result의 자료형인 ArrayList<Integer>에 맞지 않다는 문제 있음.
+        result.put("special", specialComments);
+        result.put("bad", badComments);
+        result.put("good", goodComments);
+
+        System.out.println("채점 결과는..." + result);
+//        return result;
 
     }
     // 공강 개수 count
