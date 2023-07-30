@@ -34,9 +34,14 @@ Run 'TimeTableArtistApplication.java'
 
 
 ### ⚙ 기술 스택   
-BackEnd : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728904583?alt=media&token=1bdd62e7-2d31-491e-946f-cb99a55253d4)](https://github.com/msdio/stackticon)  
-ETC : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728945370?alt=media&token=d93e7ef0-de51-4f97-b096-d2932ce66cce)](https://github.com/msdio/stackticon)  
-<a href="https://github.com/msdio/stackticon"><img src="https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728945370?alt=media&token=d93e7ef0-de51-4f97-b096-d2932ce66cce" alt="stackticon" /></a>
+BackEnd : <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">  
+
+ETC : <img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+
 
 
 ### 📁 디렉토리 구조
