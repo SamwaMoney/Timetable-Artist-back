@@ -10,7 +10,8 @@ public enum Weekday {
     TUE(1, "화"),
     WED(2, "수"),
     THU(3, "목"),
-    FRI(4, "금");
+    FRI(4, "금"),
+    ONLINE(5, "원격/온라인");
 
     private final Integer weekdayId;
 

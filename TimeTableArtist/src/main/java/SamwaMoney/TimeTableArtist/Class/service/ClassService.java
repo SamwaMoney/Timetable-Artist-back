@@ -40,12 +40,17 @@ public class ClassService {
                     .orElseThrow(() -> new RuntimeException("Timetable not found for id: " + classDto.getTimetable()));
 
             Weekday weekday = null;
-            switch (classDto.getWeekday()) {
-                case "월": weekday = Weekday.MON; break;
-                case "화": weekday = Weekday.TUE; break;
-                case "수": weekday = Weekday.WED; break;
-                case "목": weekday = Weekday.THU; break;
-                case "금": weekday = Weekday.FRI; break;
+
+            if (classDto.getWeekday() == null) {
+                weekday = Weekday.ONLINE;
+            } else {
+                switch (classDto.getWeekday()) {
+                    case "월": weekday = Weekday.MON; break;
+                    case "화": weekday = Weekday.TUE; break;
+                    case "수": weekday = Weekday.WED; break;
+                    case "목": weekday = Weekday.THU; break;
+                    case "금": weekday = Weekday.FRI; break;
+                }
             }
 
             Class newClass = Class.builder()
