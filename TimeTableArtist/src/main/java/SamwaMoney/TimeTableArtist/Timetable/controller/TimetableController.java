@@ -29,8 +29,6 @@ import java.util.List;
 public class TimetableController {
 
     private final TimetableService timetableService;
-    private final TimetableRepository timetableRepository;
-    private final ClassService classService;
     private final TableLikeService tableLikeService;
     private final S3Uploader s3Uploader;
 
