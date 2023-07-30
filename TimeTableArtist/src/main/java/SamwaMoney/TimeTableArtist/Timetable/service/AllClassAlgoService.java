@@ -62,10 +62,19 @@ public class AllClassAlgoService {
         int firstClassCount = FirstClassAlgo(t, good, bad);
 
         for (ClassDto c : t.getClassList()) {
-            if (c.getLocation().equals("원격/비대면"))
+            if ("원격/비대면".equals(c.getLocation()))
                 online++;
+
             allClasses.add(c.getClassName());
-            totalTime += (c.getEndH() - c.getStartH()) * 60 + (c.getEndH() - c.getStartM());
+
+            Integer startH = c.getStartH() != null ? c.getStartH().intValue() : null;
+            Integer endH = c.getEndH() != null ? c.getEndH().intValue() : null;
+            Integer startM = c.getStartM() != null ? c.getStartM().intValue() : null;
+            Integer endM = c.getEndM() != null ? c.getEndM().intValue() : null;
+
+            if (startH != null && endH != null && startM != null && endM != null) {
+                totalTime += (endH - startH) * 60 + (endM - startM);
+            }
         }
         allBlockCount = totalTime / 90;
         System.out.println("총 수업시간은 " + totalTime + ", 총 블럭 수는 " + allBlockCount);
@@ -226,9 +235,10 @@ public class AllClassAlgoService {
         int score = 0; // 점수 저장
 
         for (ClassDto c : t.getClassList()) {
-            if (c.getStartH() == 8) {
+            Integer startH = c.getStartH() != null ? c.getStartH().intValue() : null;
+            if (startH != null && startH == 8) {
                 firstClass++;
-                score -= 3 ;
+                score -= 3;
             }
         }
 
@@ -278,7 +288,8 @@ public class AllClassAlgoService {
     // 강의가 모두 오후인지 판별
     public static boolean allAfternoonAlgo(ClassListDto t) {
         for (ClassDto c : t.getClassList()) {
-            if (c.getStartH() >= 12) {
+            Long startH = c.getStartH();
+            if (startH != null && startH.longValue() >= 12L) {
                 continue;
             } else {
                 System.out.println("강의 모두 오후 아님");

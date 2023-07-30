@@ -159,6 +159,10 @@ public class TimetableService {
         ArrayList<Integer> minusCommentIds = commentService.getAllMinusCommentIds();
         ArrayList<Integer> specialCommentIds = commentService.getAllSpecialCommentIds();
 
+        System.out.println("plusComments: " + plusCommentIds);
+        System.out.println("minusComments: " + minusCommentIds);
+        System.out.println("specialComments: " + specialCommentIds);
+
         int score;
         int score1 = AllClassAlgoService.allClassAlgo(classListDto, plusCommentIds, minusCommentIds, specialCommentIds);
         int score2 = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
@@ -186,6 +190,7 @@ public class TimetableService {
                 .map(ClassDto::from)
                 .collect(Collectors.toList());
     }
+
     // 내 시간표 조회에 사용
     public TimetableFullResponseDto showTimetable(Long timetableId) {
         // timetableId를 기준으로 Timetable 하나 찾아오기
