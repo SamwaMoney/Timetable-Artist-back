@@ -94,9 +94,7 @@ public class TimetableController {
     // 랭킹보드 조회
     @GetMapping("/rankingboard")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<RankingboardGetResponseDto> getRankingboard(@RequestParam("sortType") String sortType, @RequestBody TimetableRankingRequestDto timetableRankingRequestDto) {
-        Long memberId = timetableRankingRequestDto.getMemberId();
-
+    public List<RankingboardGetResponseDto> getRankingboard(@RequestParam("sortType") String sortType, @RequestParam("memberId") Long memberId) {
         List<RankingboardGetResponseDto> rankingboard = timetableService.getRankingboardTimetables(sortType, memberId);
         return rankingboard;
     }
