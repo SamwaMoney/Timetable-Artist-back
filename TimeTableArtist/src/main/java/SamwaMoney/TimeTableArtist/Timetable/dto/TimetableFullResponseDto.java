@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,13 +26,16 @@ public class TimetableFullResponseDto {
     private List<CommentResponseDto> plusComments;
     private List<CommentResponseDto> minusComments;
     private List<CommentResponseDto> specialComments;
+    private String owner;
+    private Long likeCount;
+    private boolean isLiked;
 
 
     @Builder
     public TimetableFullResponseDto(Timetable table, List<ClassDto> classList,
                                     List<CommentResponseDto> plusComments,
                                     List<CommentResponseDto> minusComments,
-                                    List<CommentResponseDto> specialComments) {
+                                    List<CommentResponseDto> specialComments, String owner, Long likeCount, boolean isLiked) {
         this.memberId = table.getOwner().getMemberId();
         this.timetableId = table.getTimetableId();
         this.score = table.getScore();
@@ -46,6 +48,9 @@ public class TimetableFullResponseDto {
         this.plusComments = plusComments;
         this.minusComments = minusComments;
         this.specialComments = specialComments;
+        this.owner = owner;
+        this.likeCount = likeCount;
+        this.isLiked = isLiked;
     }
 
 }
