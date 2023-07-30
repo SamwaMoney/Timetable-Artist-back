@@ -6,17 +6,23 @@
 
 본 프로젝트는 이화여대 커리어 클럽 웹개발 동아리 EFUB의 여름 프로젝트 🏖SWS(Summer Web Surf)에서 진행되었습니다.  
 
+
+
 ## 📅 개발 일정  
 (2023.03.14 ~ 2022.08.01)  
 
 기획 및 디자인 : 2022.03.14 ~ 2022.08.01  
 개발 : 2022.06.25 ~ 2022.08.01  
 
+
+
 ## 👩🏻‍💻 팀원 소개
 | 차소연 | 김혜빈 | 조민서 | 노하은 | 이소정 |
 | ------ | ----- | ------- |------ | --------|
-|        |        |         |       |        | 
+|    API 문서 작성  댓글 API  배포     |    RDS 세팅  시간표 좋아요 API  시간표-수업 객체 연결    |    엔티티 생성  시간표 API  채점 API   시간표-수업 객체 연결  랭킹보드 API    |   유저 인증 API  기능 테스트    |    아키텍처 작성  수업 API  데이터 수합  기능 테스트    | 
 | [@Soyeon-Cha](https://github.com/Soyeon-Cha) | [@aoqls](https://github.com/aoqlsdl) |[@rovemin](https://github.com/rovemin)|[@00blowup](https://github.com/00blowup)|[@doleebest](https://github.com/doleebest)|
+
+
 
 ## 🔨 개발
 
@@ -26,9 +32,11 @@ git clone
 Run 'TimeTableArtistApplication.java'
 ```
 
+
 ### ⚙ 기술 스택   
-BackEnd :     
-ETC :   
+BackEnd : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728904583?alt=media&token=1bdd62e7-2d31-491e-946f-cb99a55253d4)](https://github.com/msdio/stackticon)
+ETC : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728945370?alt=media&token=d93e7ef0-de51-4f97-b096-d2932ce66cce)](https://github.com/msdio/stackticon)
+
 
 ### 📁 디렉토리 구조
 📂 main.java  
@@ -48,17 +56,24 @@ ETC :
     ├─ 📂 exception  
     └─ 📂 service  
 
+
 ### 📁 API 명세서
 [API 명세서 보러가기](https://www.notion.so/efub/7e4579a752c644a9be9d06e87eb8f1fc?v=451697bb988e49d884664e23687ff2f6&pvs=4)  
+
+
+
 
 ## ✨ 주요기능 소개 
 ![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/189dcc83-47a6-4393-b1c1-f266a8e1f50d)    
 직접 시간표를 만든 뒤,  
+
 ![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/72461b1f-13ca-4a42-b222-10370afc3d64)  
 나의 시간표는 얼마나 좋은 시간표인지 확인할 수 있습니다. (재미있는 코멘트는 덤!)  
+
 ![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/9729b44d-d0a8-488f-828b-d67ccea9b8c3)  
-나의 시간표를 랭킹보드에 공유할 수 있습니다.  
-다른 유저들의 시간표와 재미있는 코멘트도 확인할 수 있습니다.   
+나의 시간표를 랭킹보드에 공유할 수 있습니다. 다른 유저들의 시간표와 재미있는 코멘트도 확인해보세요!     
+
+
 
 ## 📲 와이어프레임    
 ![sws와이어프레임](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/47b0a2cb-b9bf-435c-bbb2-308a49924a86)
