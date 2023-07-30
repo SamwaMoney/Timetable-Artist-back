@@ -179,6 +179,8 @@ public class TimetableService {
         // timetableId를 기준으로 Timetable 하나 찾아오기
         Timetable timetable = findTimetableById(timetableId);
 
+        // timetableId와 memberId를 기준으로 본인의 내 시간표 좋아요 여부 찾아오기
+        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, timetable.getOwner().getMemberId());
 
         // timetableId를 기준으로, 이 시간표에 속한 모든 수업들의 정보를 담은 DTO 리스트 받아오기
         List<ClassDto> classList = classService.findClassesByTimetableId(timetableId);
@@ -189,6 +191,7 @@ public class TimetableService {
                 .timetableId(timetable.getTimetableId())
                 .owner(timetable.getOwner().getUsername())
                 .likeCount(timetable.getLikeCount())
+                .isLiked(isLiked)
                 .createdAt(timetable.getCreatedAt())
                 .classList(classList)
                 .build();

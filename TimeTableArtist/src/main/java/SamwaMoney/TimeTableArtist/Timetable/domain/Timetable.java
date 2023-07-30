@@ -3,6 +3,7 @@ package SamwaMoney.TimeTableArtist.Timetable.domain;
 import SamwaMoney.TimeTableArtist.Global.entity.BaseTimeEntity;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Class.domain.Class;
+import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.dto.RankingRequestDto;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
@@ -76,7 +77,7 @@ public class Timetable extends BaseTimeEntity {
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, Long likeCount, long replyCount, String tableTypeContent) {
+                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, boolean isLiked, Long likeCount, long replyCount, String tableTypeContent) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -86,6 +87,7 @@ public class Timetable extends BaseTimeEntity {
         this.ranking = ranking;
         this.classHide = classHide;
         this.imgUrl = imgUrl;
+        this.isLiked = isLiked;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
         this.tableTypeContent = tableTypeContent;
