@@ -23,6 +23,7 @@ import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
@@ -210,6 +211,9 @@ public class TimetableService {
             specialComments.add(new CommentResponseDto(comment));
         }
 
+        // timetableId와 memberId를 기준으로 본인의 내 시간표 좋아요 여부 찾아오기
+        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, timetable.getOwner().getMemberId());
+
         // 찾아온 데이터를 DTO에 넣어 리턴
         return TimetableFullResponseDto.builder()
                 .table(timetable)
@@ -217,6 +221,9 @@ public class TimetableService {
                 .plusComments(plusComments)
                 .minusComments(minusComments)
                 .specialComments(specialComments)
+                .owner(timetable.getOwner().getUsername())
+                .likeCount(timetable.getLikeCount())
+                .isLiked(isLiked)
                 .build();
     }
 
@@ -239,5 +246,29 @@ public class TimetableService {
         SpecialComment specialComment = specialCommentRepository.findBySpecialCommentId(specialCommentId);
         String tableTypeContent = specialComment.getContent();
         return tableTypeContent;
+    }
+
+    // 랭킹보드 조회
+    @Transactional(readOnly = true)
+    public List<RankingboardGetResponseDto> getRankingboardTimetables(String sortType, Long memberId) {
+        List<Timetable> allTimetables = timetableRepository.findAll(Sort.by(Sort.Direction.DESC, "score"));
+
+        if (sortType.equals("LOWEST")) {
+            allTimetables = timetableRepository.findAll(Sort.by(Sort.Direction.ASC, "score"));
+        } else if (sortType.equals("LIKE")) {
+            allTimetables = timetableRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount"));
+        }
+
+        List<RankingboardGetResponseDto> responseList = new ArrayList<>();
+        for (Timetable timetable : allTimetables) {
+            long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
+            boolean isLiked = false;
+
+            if (memberId != null) {
+                isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
+            }
+            responseList.add(RankingboardGetResponseDto.from(timetable, likeCount, isLiked));
+        }
+        return responseList;
     }
 }

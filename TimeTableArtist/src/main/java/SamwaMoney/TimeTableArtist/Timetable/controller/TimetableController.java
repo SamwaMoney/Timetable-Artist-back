@@ -90,4 +90,14 @@ public class TimetableController {
         RankingResponseDto rankingResponseDto = timetableService.updateByRankingReqDto(timetableId, rankingReqDto, fileUrl);
         return ResponseEntity.ok(rankingResponseDto);
     }
+
+    // 랭킹보드 조회
+    @GetMapping("/rankingboard")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<RankingboardGetResponseDto> getRankingboard(@RequestParam("sortType") String sortType, @RequestBody TimetableRankingRequestDto timetableRankingRequestDto) {
+        Long memberId = timetableRankingRequestDto.getMemberId();
+
+        List<RankingboardGetResponseDto> rankingboard = timetableService.getRankingboardTimetables(sortType, memberId);
+        return rankingboard;
+    }
 }

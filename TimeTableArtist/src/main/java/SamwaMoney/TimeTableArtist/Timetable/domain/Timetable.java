@@ -76,7 +76,7 @@ public class Timetable extends BaseTimeEntity {
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, Long likeCount, long replyCount, String tableTypeContent) {
+                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, boolean isLiked, Long likeCount, long replyCount, String tableTypeContent) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -86,6 +86,7 @@ public class Timetable extends BaseTimeEntity {
         this.ranking = ranking;
         this.classHide = classHide;
         this.imgUrl = imgUrl;
+        this.isLiked = isLiked;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
         this.tableTypeContent = tableTypeContent;
@@ -101,6 +102,8 @@ public class Timetable extends BaseTimeEntity {
         this.specialComments = new ArrayList<>();
         this.ranking = false;
         this.classHide = false;
+        this.likeCount = 0L;
+        this.replyCount = 0L;
     }
 
     // 랭킹보드 게시
