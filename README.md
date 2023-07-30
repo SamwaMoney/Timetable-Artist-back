@@ -19,8 +19,8 @@
 ## 👩🏻‍💻 팀원 소개
 | 차소연 | 김혜빈 | 조민서 | 노하은 | 이소정 |
 | ------ | ----- | ------- |------ | --------|
-|    API 문서 작성  댓글 API  배포     |    RDS 세팅  시간표 좋아요 API  시간표-수업 객체 연결    |    엔티티 생성  시간표 API  채점 API   시간표-수업 객체 연결  랭킹보드 API    |   유저 인증 API  기능 테스트    |    아키텍처 작성  수업 API  데이터 수합  기능 테스트    | 
-| [@Soyeon-Cha](https://github.com/Soyeon-Cha) | [@aoqls](https://github.com/aoqlsdl) |[@rovemin](https://github.com/rovemin)|[@00blowup](https://github.com/00blowup)|[@doleebest](https://github.com/doleebest)|
+|API 문서 작성, 댓글 API, 배포|RDS 세팅, 시간표 좋아요 API, 시간표-수업 객체 연결|엔티티 생성, 시간표 API, 채점 API, 시간표-수업 객체 연결, 랭킹보드 API|유저 인증 API, 회원 관리 API, 기능 테스트|아키텍처 작성, 수업 API, 기능 테스트| 
+|[@Soyeon-Cha](https://github.com/Soyeon-Cha)|[@aoqls](https://github.com/aoqlsdl)|[@rovemin](https://github.com/rovemin)|[@00blowup](https://github.com/00blowup)|[@doleebest](https://github.com/doleebest)|
 
 
 
@@ -34,8 +34,9 @@ Run 'TimeTableArtistApplication.java'
 
 
 ### ⚙ 기술 스택   
-BackEnd : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728904583?alt=media&token=1bdd62e7-2d31-491e-946f-cb99a55253d4)](https://github.com/msdio/stackticon)
-ETC : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728945370?alt=media&token=d93e7ef0-de51-4f97-b096-d2932ce66cce)](https://github.com/msdio/stackticon)
+BackEnd : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728904583?alt=media&token=1bdd62e7-2d31-491e-946f-cb99a55253d4)](https://github.com/msdio/stackticon)  
+ETC : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728945370?alt=media&token=d93e7ef0-de51-4f97-b096-d2932ce66cce)](https://github.com/msdio/stackticon)  
+<a href="https://github.com/msdio/stackticon"><img src="https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1690728945370?alt=media&token=d93e7ef0-de51-4f97-b096-d2932ce66cce" alt="stackticon" /></a>
 
 
 ### 📁 디렉토리 구조
@@ -54,7 +55,7 @@ ETC : [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-8139
 └─ 📂 Global  
     ├─ 📂 entity  
     ├─ 📂 exception  
-    └─ 📂 service  
+    └─ 📂 service    
 
 
 ### 📁 API 명세서
