@@ -22,3 +22,37 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+/TimeTableArtist/.gradle/8.1.1/checksums/checksums.lock
+/TimeTableArtist/.gradle/8.1.1/checksums/md5-checksums.bin
+/TimeTableArtist/.gradle/8.1.1/checksums/sha1-checksums.bin
+/TimeTableArtist/.gradle/8.1.1/dependencies-accessors/dependencies-accessors.lock
+/TimeTableArtist/.gradle/8.1.1/dependencies-accessors/gc.properties
+/TimeTableArtist/.gradle/8.1.1/executionHistory/executionHistory.lock
+/TimeTableArtist/.gradle/8.1.1/fileChanges/last-build.bin
+/TimeTableArtist/.gradle/8.1.1/fileHashes/fileHashes.lock
+/TimeTableArtist/.gradle/8.1.1/gc.properties
+/TimeTableArtist/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+/TimeTableArtist/.gradle/buildOutputCleanup/cache.properties
+/TimeTableArtist/.gradle/vcs-1/gc.properties
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/BaseTimeEntity.class.uniqueId5
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/Class$ClassBuilder.class.uniqueId6
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/Class.class.uniqueId4
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/MinusComment.class.uniqueId9
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/PlusComment.class.uniqueId11
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/Reply$ReplyBuilder.class.uniqueId2
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/Reply.class.uniqueId13
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/ReplyLike$ReplyLikeBuilder.class.uniqueId10
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/ReplyLike.class.uniqueId3
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/SpecialComment.class.uniqueId8
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/Table$TableBuilder.class.uniqueId0
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/Table.class.uniqueId1
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/TableLike$TableLikeBuilder.class.uniqueId7
+/TimeTableArtist/build/tmp/compileJava/compileTransaction/stash-dir/TableLike.class.uniqueId12
+/TimeTableArtist/out/production/resources/application.yml
+/TimeTableArtist/out/production/resources/application-secret.yml
+/TimeTableArtist/src/main/resources/application-secret.yml
+/.idea/aws.xml
+/.idea/compiler 2.xml
+/.idea/dbnavigator 2.xml
+/.idea/jarRepositories 2.xml
+/.idea/uiDesigner 2.xml
