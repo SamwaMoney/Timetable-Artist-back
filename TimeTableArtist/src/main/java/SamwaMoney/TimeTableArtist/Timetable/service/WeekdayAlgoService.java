@@ -21,7 +21,7 @@ public class WeekdayAlgoService {
     public static int maxInARowCnt;
     public static int totalScore;
 
-    public static Map<String, Integer> weekdayAlgo(ClassListDto classListDto, Map<List<String>, MoveDto> moveDifficulty, ArrayList<Integer> good, ArrayList<Integer> bad, ArrayList<Integer> special) {
+    public static Map<String, ArrayList<Long>> weekdayAlgo(ClassListDto classListDto, Map<List<String>, MoveDto> moveDifficulty, Map<String, ArrayList<Long>> result) {
 
         score = new HashMap<>(); // key: 감/가점 요인, value: 감/가점된 점수
         sevenCnt = 0; // 7교시 수
@@ -44,46 +44,50 @@ public class WeekdayAlgoService {
         score.put("threeInARow", -5 * threeInARowCnt);
 
         if (sevenCnt >= 3)
-            special.add(5); // special comment id 5 (충격) 6시 넘어서 수업 듣는 사람 (진짜 계심)
+            result.get("special").add(5L); // special comment id 5 (충격) 6시 넘어서 수업 듣는 사람 (진짜 계심)
         if (stayLongCnt >= 3)
-            special.add(6); // special comment id 6 이대 지박령을 뵙습니다
+            result.get("special").add(6L); // special comment id 6 이대 지박령을 뵙습니다
         if(plopCnt > 0)
-            special.add(7); // special comment id 7 퐁당퐁당 수업을 나누자
+            result.get("special").add(7L); // special comment id 7 퐁당퐁당 수업을 나누자
         if (highCnt >= 3)
-            special.add(9); // special comment id 9 이대생인 내가 쉬는 시간에는 치타?
+            result.get("special").add(9L); // special comment id 9 이대생인 내가 쉬는 시간에는 치타?
         if (uphillCnt >= 3)
-            special.add(10); // special comment id 10 이화사랑산악회
+            result.get("special").add(10L); // special comment id 10 이화사랑산악회
         if (noLunchCnt == 0)
-            special.add(11); // special comment id 11 점심은 포기 못해
+            result.get("special").add(11L); // special comment id 11 점심은 포기 못해
         else if (noLunchCnt >= 3)
-            special.add(12); // special comment id 12 “밥은 먹고 다니냐?”
+            result.get("special").add(12L); // special comment id 12 “밥은 먹고 다니냐?”
         if (threeInARowCnt >= 2)
-            bad.add(2); // bad comment id 2 파워 연강러
+            result.get("bad").add(2L); // bad comment id 2 파워 연강러
         if (maxInARowCnt >= 4)
-            bad.add(3); // bad comment id 3 4연강은 힘들어요
+            result.get("bad").add(3L); // bad comment id 3 4연강은 힘들어요
 
         if (score.getOrDefault("uphill", 0) == 0)
-            good.add(9); // good comment id 9 오르막길은 싫어요
+            result.get("good").add(9L); // good comment id 9 오르막길은 싫어요
         else if (score.getOrDefault("uphill", 0) <= -10)
-            bad.add(0); // bad comment id 0 오르막길 마스터
+            result.get("bad").add(0L); // bad comment id 0 오르막길 마스터
 
         if (score.getOrDefault("difficulty", 0) >= 10)
-            good.add(12); // good comment id 12 이동거리가 가까워요
+            result.get("good").add(12L); // good comment id 12 이동거리가 가까워요
         else if (score.getOrDefault("difficulty", 0) <= -10)
-            bad.add(5); // bad comment id 5 이동거리가 멀어요
+            result.get("bad").add(5L); // bad comment id 5 이동거리가 멀어요
 
         score.forEach((key, value) -> {
             totalScore += value;
         });
 
-        if(good.size() > 3) {
-            good = pickThree(good);
+        // 3개를 초과하는 코멘트는 그 중 3개만 랜덤 선택
+        if(result.get("good").size() > 3) {
+            ArrayList<Long> picked = pickThree(result.get("good"));
+            result.put("good", picked);
         }
-        if(bad.size() > 3) {
-            bad = pickThree(bad);
+        if(result.get("bad").size() > 3) {
+            ArrayList<Long> picked = pickThree(result.get("bad"));
+            result.put("bad", picked);
         }
-        if(special.size() > 3) {
-            special = pickThree(special);
+        if(result.get("special").size() > 3) {
+            ArrayList<Long> picked = pickThree(result.get("special"));
+            result.put("special", picked);
         }
 
         System.out.println("7교시 있는 날의 수: " + sevenCnt + ", 6시간 이상 학교에 머무는 날 수: " + stayLongCnt);
@@ -93,12 +97,16 @@ public class WeekdayAlgoService {
         System.out.println("요일별 점수 계산:" + score);
         System.out.println("요일별 계산에 의한 총 점수: " + totalScore);
 
-        return score;
+        // 점수 계산 결과를 result에 반영
+        Long now = result.get("score").get(0);
+        result.get("score").set(0, now+totalScore);
+
+        return result;
     }
 
-    public static ArrayList<Integer> pickThree(ArrayList<Integer> list) {
+    public static ArrayList<Long> pickThree(ArrayList<Long> list) {
         // 선택된 3개 코멘트의 ID를 담을 리스트
-        ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<Long> result = new ArrayList<>();
 
         Random random = new Random();
         for(int i=0; i<3; i++) {

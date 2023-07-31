@@ -25,4 +25,10 @@ public class TableMinusComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="minuscomment_id")
     private MinusComment minusComment;
+
+    @Builder
+    public TableMinusComment (Timetable timetable, MinusComment minusComment) {
+        this.timetable = timetable;
+        this.minusComment = minusComment;
+    }
 }

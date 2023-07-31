@@ -25,4 +25,10 @@ public class TablePlusComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="pluscomment_id")
     private PlusComment plusComment;
+
+    @Builder
+    public TablePlusComment (Timetable timetable, PlusComment plusComment) {
+        this.timetable = timetable;
+        this.plusComment = plusComment;
+    }
 }

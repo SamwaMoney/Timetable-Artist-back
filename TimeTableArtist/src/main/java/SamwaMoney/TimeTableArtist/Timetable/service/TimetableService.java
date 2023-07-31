@@ -7,10 +7,15 @@ import SamwaMoney.TimeTableArtist.Class.dto.ClassListDto;
 import SamwaMoney.TimeTableArtist.Class.dto.MoveDto;
 import SamwaMoney.TimeTableArtist.Class.repository.ClassRepository;
 import SamwaMoney.TimeTableArtist.Comment.Service.CommentService;
+import SamwaMoney.TimeTableArtist.Comment.Service.MinusCommentService;
+import SamwaMoney.TimeTableArtist.Comment.Service.PlusCommentService;
+import SamwaMoney.TimeTableArtist.Comment.Service.SpecialCommentService;
 import SamwaMoney.TimeTableArtist.Comment.dto.CommentResponseDto;
 import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
 import SamwaMoney.TimeTableArtist.Comment.entity.PlusComment;
 import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
+import SamwaMoney.TimeTableArtist.Comment.repository.MinusCommentRepository;
+import SamwaMoney.TimeTableArtist.Comment.repository.PlusCommentRepository;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
@@ -22,6 +27,10 @@ import SamwaMoney.TimeTableArtist.Timetable.repository.TimetableRepository;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableMinusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
+import SamwaMoney.TimeTableArtist.tablecommentmap.repository.TableMinusCommentRepository;
+import SamwaMoney.TimeTableArtist.tablecommentmap.repository.TablePlusCommentRepository;
+import SamwaMoney.TimeTableArtist.tablecommentmap.repository.TableSpecialCommentRepository;
+import SamwaMoney.TimeTableArtist.utils.TimetableUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -52,10 +61,18 @@ public class TimetableService {
     private final ClassService classService;
     private final ClassRepository classRepository;
     private final CommentService commentService;
-    private final SpecialCommentRepository specialCommentRepository;
+
     private final WeekdayAlgoService weekdayAlgoService;
     private final TableTypeAlgoService tableTypeAlgoService;
     private final Map<List<String>, MoveDto> moveDifficultyMap = makeMoveDifficulties();
+
+    private final PlusCommentService plusCommentService;
+    private final MinusCommentService minusCommentService;
+    private final SpecialCommentService specialCommentService;
+
+    private final TablePlusCommentRepository tablePlusCommentRepository;
+    private final TableMinusCommentRepository tableMinusCommentRepository;
+    private final TableSpecialCommentRepository tableSpecialCommentRepository;
 
     // 시간표 생성
     public Timetable createTimetable(TimetableRequestDto requestDto) {
@@ -155,48 +172,75 @@ public class TimetableService {
 
         System.out.println("금요일 강의 목록: " + friday);
 
+        // 모든 코멘트
         ArrayList<Integer> plusCommentIds = commentService.getAllPlusCommentIds();
         ArrayList<Integer> minusCommentIds = commentService.getAllMinusCommentIds();
         ArrayList<Integer> specialCommentIds = commentService.getAllSpecialCommentIds();
 
-        // 댓글 데이터 가져온 후 출력하여 확인
+        // 코멘트 데이터 가져온 후 출력하여 확인
         System.out.println("After fetching comments:");
         System.out.println("plusComments: " + plusCommentIds);
         System.out.println("minusComments: " + minusCommentIds);
         System.out.println("specialComments: " + specialCommentIds);
 
-        int score;
 
         // AllClassAlgo에서 결과값 얻기
-        Map<String, ArrayList<Integer>> result = new HashMap<>();
-        AllClassAlgoService.allClassAlgo(classListDto, plusCommentIds, minusCommentIds, specialCommentIds, result);
-        int score1 = result.get("score");
-        ArrayList<Integer> good1 = result.get("goodComments");
-        ArrayList<Integer> bad1 = result.get("badComments");
-        ArrayList<Integer> special1 = result.get("specialComments");
+        Map<String, ArrayList<Long>> result = AllClassAlgoService.allClassAlgo(classListDto);
 
-        System.out.println("AllClassAlgo에서 결과값은: " + score1);
-        System.out.println("AllClassAlgo에서 선정된 good comment는: " + good1);
-        System.out.println("AllClassAlgo에서 선정된 bad comment는: " + bad1);
-        System.out.println("AllClassAlgo에서 선정된 special comment는: " + special1);
+        System.out.println("AllClassAlgo에서 결과값은: " + result.get("score").get(0));
+        System.out.println("AllClassAlgo에서 선정된 good comment는: " + result.get("good"));
+        System.out.println("AllClassAlgo에서 선정된 bad comment는: " + result.get("bad"));
+        System.out.println("AllClassAlgo에서 선정된 special comment는: " + result.get("special"));
 
-//        int score2 = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
-//        Map<String, Integer> weekdayResult = weekdayAlgoService.weekdayAlgo(classListDto, moveDifficultyMap, plusCommentIds, minusCommentIds, specialCommentIds);
-//        int score2 =
-         score = 60 + score1;
-        if (score < 0) {
-            score = 0;
-        } else if (score > 100) {
-            score = 100;
+        // WeekdayAlgoService에서 결과값 얻기
+        Map<List<String>, MoveDto> moveDifficulty = TimetableUtil.makeMoveDifficulties();
+        result = WeekdayAlgoService.weekdayAlgo(classListDto, moveDifficulty, result);
+
+
+        // 채점결과 총점이 100점을 초과할 경우, 100점으로 변경
+        if (result.get("score").get(0) > 100) {
+            result.get("score").set(0, 100L);
         }
 
-        int tableTypeCommentId = tableTypeAlgoService.tableTypeAlgo(specialCommentRepository.getAllIds());
+        Long tableTypeCommentId = tableTypeAlgoService.tableTypeAlgo(result.get("special"));
 
         // 시간표 엔티티의 score와 tableType 필드를 업데이트
-        timetable.setScore((long) score);
-        timetable.setTableType((long) tableTypeCommentId);
+        timetable.setScore(result.get("score").get(0));
+        timetable.setTableType(tableTypeCommentId);
 
         timetableRepository.save(timetable);
+
+        // 코멘트 매핑 정보를 DB에 저장
+        // Plus 코멘트
+        for(Long id : result.get("good")) {
+            PlusComment plusComment = plusCommentService.findPlusCommentById(id);
+            tablePlusCommentRepository.save(
+                    TablePlusComment.builder()
+                            .plusComment(plusComment)
+                            .timetable(timetable)
+                            .build()
+            );
+        }
+        // Minus 코멘트
+        for(Long id : result.get("bad")) {
+            MinusComment minusComment = minusCommentService.findMinusCommentById(id);
+            tableMinusCommentRepository.save(
+                    TableMinusComment.builder()
+                            .minusComment(minusComment)
+                            .timetable(timetable)
+                            .build()
+            );
+        }
+        // Special 코멘트
+        for(Long id : result.get("special")) {
+            SpecialComment specialComment =specialCommentService.findSpecialCommentById(id);
+            tableSpecialCommentRepository.save(
+                    TableSpecialComment.builder()
+                            .specialComment(specialComment)
+                            .timetable(timetable)
+                            .build()
+            );
+        }
 
         return classListDto;
     }
@@ -265,7 +309,7 @@ public class TimetableService {
     public String readTableTypeContent(Long timetableId) {
         Timetable timetable = timetableRepository.findByTimetableId(timetableId);
         Long specialCommentId = timetable.getTableType();
-        SpecialComment specialComment = specialCommentRepository.findBySpecialCommentId(specialCommentId);
+        SpecialComment specialComment = specialCommentService.findSpecialCommentById(specialCommentId);
         String tableTypeContent = specialComment.getContent();
         return tableTypeContent;
     }

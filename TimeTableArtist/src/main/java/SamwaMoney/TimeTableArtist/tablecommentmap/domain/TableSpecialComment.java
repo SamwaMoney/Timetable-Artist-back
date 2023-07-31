@@ -24,4 +24,10 @@ public class TableSpecialComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="specialcomment_id")
     private SpecialComment specialComment;
+
+    @Builder
+    public TableSpecialComment (Timetable timetable, SpecialComment specialComment) {
+        this.timetable = timetable;
+        this.specialComment = specialComment;
+    }
 }
