@@ -229,6 +229,7 @@ public class TimetableService {
                 .owner(timetable.getOwner().getUsername())
                 .likeCount(timetable.getLikeCount())
                 .isLiked(isLiked)
+                .replyCount(timetable.getReplyCount())
                 .build();
     }
 
