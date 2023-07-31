@@ -18,11 +18,10 @@
 
 ## 👩🏻‍💻 팀원 소개
 | 차소연 | 김혜빈 | 조민서 | 노하은 | 이소정 |
-| ------ | ----- | ------- |------ | --------|
+|![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/dbd8a130-9650-4ebc-baf5-64601a3c470f)|![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/0d4edf5a-d822-4f58-8e90-02556f7a761e)|![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/bb267609-0675-4854-8b54-9250fafdc330)|![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/7f3d6a41-0036-4e2b-be9f-5b7b2436093b)|![image](https://github.com/SamwaMoney/Timetable-Artist-back/assets/90204371/7b6c2798-d0c4-44de-803a-7eed51995501)|
 |API 문서 작성, 댓글 API, 배포|RDS 세팅, 시간표 좋아요 API, 시간표-수업 객체 연결|엔티티 생성, 시간표 API, 채점 API, 시간표-수업 객체 연결, 랭킹보드 API|유저 인증 API, 회원 관리 API, 기능 테스트|아키텍처 작성, 수업 API, 기능 테스트| 
 |[@Soyeon-Cha](https://github.com/Soyeon-Cha)|[@aoqls](https://github.com/aoqlsdl)|[@rovemin](https://github.com/rovemin)|[@00blowup](https://github.com/00blowup)|[@doleebest](https://github.com/doleebest)|
 <br/> <br/>
-
 
 ## 🔨 개발
 
