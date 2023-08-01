@@ -211,7 +211,7 @@ public class TimetableService {
         timetable.setScore(result.get("score").get(0));
         timetable.setTableType(tableTypeCommentId);
         timetable.setTableTypeContent(tableTypeComment);
-        Photo photo = photoRepository.findByPhotoId(tableTypeCommentId);
+        Photo photo = photoRepository.findByPhotoId(tableTypeCommentId+1);
         timetable.setTypeImage(photo.getName());
 
         timetableRepository.save(timetable);
