@@ -58,7 +58,7 @@ public class Timetable extends BaseTimeEntity {
     @Column
     private String imgUrl; // 시간표 게시할 때 프론트로부터 받는 시간표 이미지
 
-    @Column
+    @Setter
     private String typeImage; // 시간표의 type에 해당하는 짤
 
     @Setter

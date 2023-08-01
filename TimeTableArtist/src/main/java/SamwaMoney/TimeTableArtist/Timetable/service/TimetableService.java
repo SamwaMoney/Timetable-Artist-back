@@ -20,6 +20,8 @@ import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
 import SamwaMoney.TimeTableArtist.Member.service.MemberService;
+import SamwaMoney.TimeTableArtist.Photo.domain.Photo;
+import SamwaMoney.TimeTableArtist.Photo.repository.PhotoRepository;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
@@ -72,6 +74,7 @@ public class TimetableService {
     private final TableSpecialCommentRepository tableSpecialCommentRepository;
 
     private final SpecialCommentRepository specialCommentRepository;
+    private final PhotoRepository photoRepository;
 
     // 시간표 생성
     public Timetable createTimetable(TimetableRequestDto requestDto) {
@@ -208,6 +211,8 @@ public class TimetableService {
         timetable.setScore(result.get("score").get(0));
         timetable.setTableType(tableTypeCommentId);
         timetable.setTableTypeContent(tableTypeComment);
+        Photo photo = photoRepository.findByPhotoId(tableTypeCommentId);
+        timetable.setTypeImage(photo.getName());
 
         timetableRepository.save(timetable);
 
