@@ -71,6 +71,8 @@ public class TimetableService {
     private final TableMinusCommentRepository tableMinusCommentRepository;
     private final TableSpecialCommentRepository tableSpecialCommentRepository;
 
+    private final SpecialCommentRepository specialCommentRepository;
+
     // 시간표 생성
     public Timetable createTimetable(TimetableRequestDto requestDto) {
         Member owner = memberRepository.findById(requestDto.getMemberId())
@@ -105,7 +107,7 @@ public class TimetableService {
         for (Timetable timetable : allTimetables) {
             boolean isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
             long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
-            String tableType = "";
+            String tableType = timetable.getTableTypeContent();
             String tableImg = "";
             responseList.add(TimetableResponseWithLikeDto.from(timetable, isLiked, tableType, tableImg, likeCount));
         }
@@ -200,10 +202,12 @@ public class TimetableService {
         }
 
         Long tableTypeCommentId = tableTypeAlgoService.tableTypeAlgo(result.get("special"));
+        String tableTypeComment = specialCommentRepository.findBySpecialCommentId(tableTypeCommentId).getContent();
 
         // 시간표 엔티티의 score와 tableType 필드를 업데이트
         timetable.setScore(result.get("score").get(0));
         timetable.setTableType(tableTypeCommentId);
+        timetable.setTableTypeContent(tableTypeComment);
 
         timetableRepository.save(timetable);
 
