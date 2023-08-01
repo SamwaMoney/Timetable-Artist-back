@@ -1,6 +1,6 @@
-package SamwaMoney.TimeTableArtist.Photo.repository;
+package SamwaMoney.TimeTableArtist.Comment.repository;
 
-import SamwaMoney.TimeTableArtist.Photo.domain.Photo;
+import SamwaMoney.TimeTableArtist.Comment.entity.Photo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PhotoRepository extends JpaRepository {

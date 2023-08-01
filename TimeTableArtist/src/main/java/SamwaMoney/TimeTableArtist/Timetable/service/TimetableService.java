@@ -12,16 +12,13 @@ import SamwaMoney.TimeTableArtist.Comment.Service.PlusCommentService;
 import SamwaMoney.TimeTableArtist.Comment.Service.SpecialCommentService;
 import SamwaMoney.TimeTableArtist.Comment.dto.CommentResponseDto;
 import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
+import SamwaMoney.TimeTableArtist.Comment.entity.Photo;
 import SamwaMoney.TimeTableArtist.Comment.entity.PlusComment;
 import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
-import SamwaMoney.TimeTableArtist.Comment.repository.MinusCommentRepository;
-import SamwaMoney.TimeTableArtist.Comment.repository.PlusCommentRepository;
+import SamwaMoney.TimeTableArtist.Comment.repository.PhotoRepository;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
-import SamwaMoney.TimeTableArtist.Member.service.MemberService;
-import SamwaMoney.TimeTableArtist.Photo.domain.Photo;
-import SamwaMoney.TimeTableArtist.Photo.repository.PhotoRepository;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
@@ -38,16 +35,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
-import javax.xml.stream.events.Comment;
 import java.util.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
