@@ -2,9 +2,7 @@ package SamwaMoney.TimeTableArtist.tablecommentmap.domain;
 
 import SamwaMoney.TimeTableArtist.Comment.entity.PlusComment;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
