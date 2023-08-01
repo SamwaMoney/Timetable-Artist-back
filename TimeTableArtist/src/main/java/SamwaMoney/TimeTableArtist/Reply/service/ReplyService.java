@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -62,9 +63,15 @@ public class ReplyService {
                 .orElseThrow(()->new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
     }
 
-    public void removeReply(Long replyId){
+    public String removeReply(Long memberId, Long replyId){
         Reply reply = findReplyById(replyId);
-        replyRepository.delete(reply);
+        if (Objects.equals(reply.getWriter().getMemberId(), memberId)){
+            replyRepository.delete(reply);
+            return "댓글이 삭제되었습니다.";
+        }
+        else {
+            return "해당 댓글을 삭제할 권한이 없습니다.";
+        }
     }
 }
 
