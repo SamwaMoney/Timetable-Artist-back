@@ -81,6 +81,14 @@ public class TimetableController {
         return timetablesWithLikeStatus;
     }
 
+    // memberId를 통해 timetableId get
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<Long> findTimetableIdByMemberId(@RequestParam(value = "memberId") Long memberId) {
+        Long timetableId = timetableService.findTimetableIdByMemberId(memberId);
+        return ResponseEntity.ok(timetableId);
+    }
+
     // 랭킹보드 게시
     @PutMapping(value = "{timetableId}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

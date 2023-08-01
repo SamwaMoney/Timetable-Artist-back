@@ -37,13 +37,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import javax.xml.stream.events.Comment;
+import java.util.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
@@ -336,5 +333,15 @@ public class TimetableService {
             responseList.add(RankingboardGetResponseDto.from(timetable, likeCount, isLiked));
         }
         return responseList;
+    }
+
+    // memberId를 이용해 timetableId 조회
+    public Long findTimetableIdByMemberId(Long memberId) {
+        Member owner = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
+
+        Optional<Timetable> timetableOptional = timetableRepository.findByOwner(owner);
+        return timetableOptional.map(Timetable::getTimetableId)
+                .orElseThrow(() -> new EntityNotFoundException("Timetable not found for memberId: " + memberId));
     }
 }
