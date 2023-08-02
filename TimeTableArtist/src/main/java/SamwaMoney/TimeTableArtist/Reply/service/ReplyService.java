@@ -6,7 +6,6 @@ import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.repository.ReplyRepository;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
-import SamwaMoney.TimeTableArtist.Timetable.service.AllClassAlgoService;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +34,9 @@ public class ReplyService {
         boolean nameHide = requestDto.isNameHide();
         String name = writer.getUsername();
         String replyName = selectName(nameHide, name);
-
         boolean isHeart = false;
         Integer replyLikeCount = 0;
+        timetable.setReplyCount(timetable.getReplyCount() + 1);
         return replyRepository.save(requestDto.toEntity(timetable, writer, replyName, isHeart, replyLikeCount)).getReplyId();
     }
 
@@ -67,6 +66,8 @@ public class ReplyService {
         Reply reply = findReplyById(replyId);
         if (Objects.equals(reply.getWriter().getMemberId(), memberId)){
             replyRepository.delete(reply);
+            Timetable timetable = findReplyById(replyId).getTimetable();
+            timetable.setReplyCount(timetable.getReplyCount() - 1);
             return "댓글이 삭제되었습니다.";
         }
         else {

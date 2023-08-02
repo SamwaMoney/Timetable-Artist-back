@@ -1,7 +1,6 @@
 package SamwaMoney.TimeTableArtist.Reply.controller;
 
 import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
-import SamwaMoney.TimeTableArtist.Reply.dto.HeartRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyResponseDto;
 import SamwaMoney.TimeTableArtist.Reply.service.ReplyService;
