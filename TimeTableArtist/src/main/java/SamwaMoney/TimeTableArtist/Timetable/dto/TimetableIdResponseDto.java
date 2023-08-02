@@ -1,7 +1,9 @@
 package SamwaMoney.TimeTableArtist.Timetable.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class TimetableIdResponseDto {
     private Long memberId;
     private Long timetableId;
