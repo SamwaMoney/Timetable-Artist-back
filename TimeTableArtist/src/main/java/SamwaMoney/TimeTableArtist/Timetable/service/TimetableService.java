@@ -86,7 +86,8 @@ public class TimetableService {
 
     // 시간표 삭제 (초기화)
     public void removeTimetable(Long timetableId, Long memberId) {
-        Timetable timetable = timetableRepository.findByTimetableIdAndOwner(timetableId, memberId)
+        Member foundMember = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원정보입니다!"));
+        Timetable timetable = timetableRepository.findByTimetableIdAndOwner(timetableId, foundMember)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
         timetableRepository.delete(timetable);
     }
