@@ -339,11 +339,19 @@ public class TimetableService {
 
     // memberId를 이용해 timetableId 조회
     public Long findTimetableIdByMemberId(Long memberId) {
-        Member owner = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
+        Long tableIdResult;
+        boolean tableExists = isExistsByOwnerMemberId(memberId);
+        if (tableExists){
+            tableIdResult = (timetableRepository.findByMemberId(memberId)).getTimetableId();
+        }
+        else {
+            tableIdResult = null;
+        }
+        return tableIdResult;
+    }
 
-        Optional<Timetable> timetableOptional = timetableRepository.findByOwner(owner);
-        return timetableOptional.map(Timetable::getTimetableId)
-                .orElseThrow(() -> new EntityNotFoundException("Timetable not found for memberId: " + memberId));
+    @Transactional(readOnly = true)
+    public boolean isExistsByOwnerMemberId(Long memberId) {
+        return timetableRepository.existsByOwnerMemberId(memberId);
     }
 }
