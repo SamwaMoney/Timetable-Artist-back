@@ -51,8 +51,8 @@ public class TimetableController {
     // 내 시간표 조회
     @GetMapping("/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public TimetableFullResponseDto showTimetable(@PathVariable("timetable_id") Long timetableId) {
-        return timetableService.showTimetable(timetableId);
+    public TimetableFullResponseDto showTimetable(@PathVariable("timetable_id") Long timetableId, @RequestParam(value = "memberId") Long memberId) {
+        return timetableService.showTimetable(timetableId, memberId);
     }
 
     // 시간표 채점

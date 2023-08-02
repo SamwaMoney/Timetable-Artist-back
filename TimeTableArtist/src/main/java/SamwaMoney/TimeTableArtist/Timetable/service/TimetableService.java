@@ -251,8 +251,8 @@ public class TimetableService {
                 .collect(Collectors.toList());
     }
 
-    // 내 시간표 조회에 사용
-    public TimetableFullResponseDto showTimetable(Long timetableId) {
+    // timetableId로 시간표 상세 조회   내 시간표 조회 포함
+    public TimetableFullResponseDto showTimetable(Long timetableId, Long memberId) {
         // timetableId를 기준으로 Timetable 하나 찾아오기
         Timetable timetable = findTimetableById(timetableId);
 
@@ -276,8 +276,8 @@ public class TimetableService {
             specialComments.add(new CommentResponseDto(comment));
         }
 
-        // timetableId와 memberId를 기준으로 본인의 내 시간표 좋아요 여부 찾아오기
-        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, timetable.getOwner().getMemberId());
+        // timetableId와 사용자 본인의 memberId를 기준으로 시간표 좋아요 여부 찾아오기
+        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, memberId);
 
         // 찾아온 데이터를 DTO에 넣어 리턴
         return TimetableFullResponseDto.builder()
