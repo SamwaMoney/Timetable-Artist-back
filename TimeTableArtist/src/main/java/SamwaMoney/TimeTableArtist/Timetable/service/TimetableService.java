@@ -341,8 +341,9 @@ public class TimetableService {
     public Long findTimetableIdByMemberId(Long memberId) {
         Long tableIdResult;
         boolean tableExists = isExistsByOwnerMemberId(memberId);
+        Member owner = memberRepository.findByMemberId(memberId);
         if (tableExists){
-            tableIdResult = (timetableRepository.findByMemberId(memberId)).getTimetableId();
+            tableIdResult = (timetableRepository.findByOwner(owner)).getTimetableId();
         }
         else {
             tableIdResult = null;
