@@ -12,14 +12,13 @@ import SamwaMoney.TimeTableArtist.Comment.Service.PlusCommentService;
 import SamwaMoney.TimeTableArtist.Comment.Service.SpecialCommentService;
 import SamwaMoney.TimeTableArtist.Comment.dto.CommentResponseDto;
 import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
+import SamwaMoney.TimeTableArtist.Comment.entity.Photo;
 import SamwaMoney.TimeTableArtist.Comment.entity.PlusComment;
 import SamwaMoney.TimeTableArtist.Comment.entity.SpecialComment;
-import SamwaMoney.TimeTableArtist.Comment.repository.MinusCommentRepository;
-import SamwaMoney.TimeTableArtist.Comment.repository.PlusCommentRepository;
+import SamwaMoney.TimeTableArtist.Comment.repository.PhotoRepository;
 import SamwaMoney.TimeTableArtist.Comment.repository.SpecialCommentRepository;
 import SamwaMoney.TimeTableArtist.Member.domain.Member;
 import SamwaMoney.TimeTableArtist.Member.repository.MemberRepository;
-import SamwaMoney.TimeTableArtist.Member.service.MemberService;
 import SamwaMoney.TimeTableArtist.TableLike.service.TableLikeService;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import SamwaMoney.TimeTableArtist.Timetable.dto.*;
@@ -36,19 +35,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
-import javax.xml.stream.events.Comment;
+import java.util.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static SamwaMoney.TimeTableArtist.utils.TimetableUtil.makeMoveDifficulties;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -73,6 +65,9 @@ public class TimetableService {
     private final TablePlusCommentRepository tablePlusCommentRepository;
     private final TableMinusCommentRepository tableMinusCommentRepository;
     private final TableSpecialCommentRepository tableSpecialCommentRepository;
+
+    private final SpecialCommentRepository specialCommentRepository;
+    private final PhotoRepository photoRepository;
 
     // 시간표 생성
     public Timetable createTimetable(TimetableRequestDto requestDto) {
@@ -109,7 +104,7 @@ public class TimetableService {
         for (Timetable timetable : allTimetables) {
             boolean isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
             long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
-            String tableType = "";
+            String tableType = timetable.getTableTypeContent();
             String tableImg = "";
             responseList.add(TimetableResponseWithLikeDto.from(timetable, isLiked, tableType, tableImg, likeCount));
         }
@@ -204,10 +199,14 @@ public class TimetableService {
         }
 
         Long tableTypeCommentId = tableTypeAlgoService.tableTypeAlgo(result.get("special"));
+        String tableTypeComment = specialCommentRepository.findBySpecialCommentId(tableTypeCommentId).getContent();
 
         // 시간표 엔티티의 score와 tableType 필드를 업데이트
         timetable.setScore(result.get("score").get(0));
         timetable.setTableType(tableTypeCommentId);
+        timetable.setTableTypeContent(tableTypeComment);
+        Photo photo = photoRepository.findByPhotoId(tableTypeCommentId+1);
+        timetable.setTypeImage(photo.getName());
 
         timetableRepository.save(timetable);
 
@@ -253,8 +252,8 @@ public class TimetableService {
                 .collect(Collectors.toList());
     }
 
-    // 내 시간표 조회에 사용
-    public TimetableFullResponseDto showTimetable(Long timetableId) {
+    // timetableId로 시간표 상세 조회   내 시간표 조회 포함
+    public TimetableFullResponseDto showTimetable(Long timetableId, Long memberId) {
         // timetableId를 기준으로 Timetable 하나 찾아오기
         Timetable timetable = findTimetableById(timetableId);
 
@@ -278,8 +277,8 @@ public class TimetableService {
             specialComments.add(new CommentResponseDto(comment));
         }
 
-        // timetableId와 memberId를 기준으로 본인의 내 시간표 좋아요 여부 찾아오기
-        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, timetable.getOwner().getMemberId());
+        // timetableId와 사용자 본인의 memberId를 기준으로 시간표 좋아요 여부 찾아오기
+        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, memberId);
 
         // 찾아온 데이터를 DTO에 넣어 리턴
         return TimetableFullResponseDto.builder()
@@ -337,5 +336,27 @@ public class TimetableService {
             responseList.add(RankingboardGetResponseDto.from(timetable, likeCount, isLiked));
         }
         return responseList;
+    }
+
+    // memberId를 이용해 timetableId 조회
+    public TimetableIdResponseDto findTimetableIdByMemberId(Long memberId) {
+        Long tableIdResult;
+        boolean tableExists = isExistsByOwnerMemberId(memberId);
+        Member owner = memberRepository.findByMemberId(memberId);
+        if (tableExists){
+            tableIdResult = (timetableRepository.findByOwner(owner)).getTimetableId();
+        }
+        else {
+            tableIdResult = null;
+        }
+        return TimetableIdResponseDto.builder()
+                .memberId(memberId)
+                .timetableId(tableIdResult)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isExistsByOwnerMemberId(Long memberId) {
+        return timetableRepository.existsByOwnerMemberId(memberId);
     }
 }

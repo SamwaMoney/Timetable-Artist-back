@@ -42,7 +42,7 @@ public class TimetableFullResponseDto {
         this.tableType = table.getTableType();
         this.tableTypeContent = table.getTableTypeContent();
         this.classHide = table.isClassHide();
-        this.photo = table.getImgUrl();
+        this.photo = table.getTypeImage();
         this.createdAt = table.getCreatedAt();
         this.classList = classList;
         this.plusComments = plusComments;

@@ -56,7 +56,10 @@ public class Timetable extends BaseTimeEntity {
     private boolean classHide;
 
     @Column
-    private String imgUrl;
+    private String imgUrl; // 시간표 게시할 때 프론트로부터 받는 시간표 이미지
+
+    @Setter
+    private String typeImage; // 시간표의 type에 해당하는 짤
 
     @Setter
     private boolean isLiked;
@@ -76,7 +79,7 @@ public class Timetable extends BaseTimeEntity {
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, boolean isLiked, Long likeCount, long replyCount, String tableTypeContent) {
+                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, String typeImage, boolean isLiked, Long likeCount, long replyCount, String tableTypeContent) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -86,6 +89,7 @@ public class Timetable extends BaseTimeEntity {
         this.ranking = ranking;
         this.classHide = classHide;
         this.imgUrl = imgUrl;
+        this.typeImage = typeImage;
         this.isLiked = isLiked;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
