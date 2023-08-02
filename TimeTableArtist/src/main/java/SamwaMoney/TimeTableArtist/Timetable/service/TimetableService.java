@@ -338,7 +338,7 @@ public class TimetableService {
     }
 
     // memberId를 이용해 timetableId 조회
-    public Long findTimetableIdByMemberId(Long memberId) {
+    public TimetableIdResponseDto findTimetableIdByMemberId(Long memberId) {
         Long tableIdResult;
         boolean tableExists = isExistsByOwnerMemberId(memberId);
         Member owner = memberRepository.findByMemberId(memberId);
@@ -348,7 +348,10 @@ public class TimetableService {
         else {
             tableIdResult = null;
         }
-        return tableIdResult;
+        return TimetableIdResponseDto.builder()
+                .memberId(memberId)
+                .timetableId(tableIdResult)
+                .build();
     }
 
     @Transactional(readOnly = true)

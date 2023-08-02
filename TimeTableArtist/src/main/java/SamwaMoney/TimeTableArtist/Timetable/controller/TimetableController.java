@@ -84,9 +84,8 @@ public class TimetableController {
     // memberId를 통해 timetableId get
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<Long> findTimetableIdByMemberId(@RequestParam(value = "memberId") Long memberId) {
-        Long timetableId = timetableService.findTimetableIdByMemberId(memberId);
-        return ResponseEntity.ok(timetableId);
+    public TimetableIdResponseDto findTimetableId(@RequestParam(value = "memberId") Long memberId) {
+        return timetableService.findTimetableIdByMemberId(memberId);
     }
 
     // 랭킹보드 게시
