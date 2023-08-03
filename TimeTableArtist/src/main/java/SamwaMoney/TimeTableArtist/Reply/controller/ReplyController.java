@@ -33,7 +33,7 @@ public class ReplyController {
     @ResponseStatus(code = HttpStatus.OK)
     public TimetableRepliesResponseDto readTimetableReplies(@PathVariable Long timetableId, @RequestParam(value = "memberId") Long memberId){
         List<Reply> replyList = replyService.findReplyListByTimetable(timetableId);
-        if (memberId != null){
+        if (memberId != -1){
             for (Reply reply : replyList)
             {
                 reply.heart = replyLikeService.isHeart(memberId, reply);
