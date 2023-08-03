@@ -62,17 +62,11 @@ public class ReplyService {
                 .orElseThrow(()->new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
     }
 
-    public String removeReply(Long memberId, Long replyId){
+    public void removeReply(Long replyId){
         Reply reply = findReplyById(replyId);
-        if (Objects.equals(reply.getWriter().getMemberId(), memberId)){
-            replyRepository.delete(reply);
-            Timetable timetable = findReplyById(replyId).getTimetable();
-            timetable.setReplyCount(timetable.getReplyCount() - 1);
-            return "댓글이 삭제되었습니다.";
-        }
-        else {
-            return "해당 댓글을 삭제할 권한이 없습니다.";
-        }
+        replyRepository.delete(reply);
+        Timetable timetable = findReplyById(replyId).getTimetable();
+        timetable.setReplyCount(timetable.getReplyCount() - 1);
     }
 }
 
