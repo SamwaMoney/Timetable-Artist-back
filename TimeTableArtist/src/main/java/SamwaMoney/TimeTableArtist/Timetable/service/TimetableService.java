@@ -277,8 +277,11 @@ public class TimetableService {
             specialComments.add(new CommentResponseDto(comment));
         }
 
-        // timetableId와 사용자 본인의 memberId를 기준으로 시간표 좋아요 여부 찾아오기
-        boolean isLiked = tableLikeService.isTimetableLikedByMember(timetableId, memberId);
+        boolean isLiked = false;
+        // 로그인한 사옹자의 경우 timetableId와 사용자 본인의 memberId를 기준으로 시간표 좋아요 여부 찾아오기
+        if (memberId != -1) {
+            isLiked = tableLikeService.isTimetableLikedByMember(timetableId, memberId);
+        }
 
         // 찾아온 데이터를 DTO에 넣어 리턴
         return TimetableFullResponseDto.builder()

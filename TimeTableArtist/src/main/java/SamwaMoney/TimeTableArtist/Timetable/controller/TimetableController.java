@@ -48,7 +48,7 @@ public class TimetableController {
         return "시간표가 성공적으로 삭제되었습니다.";
     }
 
-    // 내 시간표 조회
+    // timetableId로 시간표 상세 조회   내 시간표 조회 포함
     @GetMapping("/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
     public TimetableFullResponseDto showTimetable(@PathVariable("timetable_id") Long timetableId, @RequestParam(value = "memberId") Long memberId) {
