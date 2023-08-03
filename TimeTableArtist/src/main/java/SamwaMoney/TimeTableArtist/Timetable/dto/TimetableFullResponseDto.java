@@ -29,6 +29,7 @@ public class TimetableFullResponseDto {
     private String owner;
     private Long likeCount;
     private boolean isLiked;
+    private boolean ranking;
 
 
     @Builder
@@ -51,6 +52,7 @@ public class TimetableFullResponseDto {
         this.owner = owner;
         this.likeCount = likeCount;
         this.isLiked = isLiked;
+        this.ranking = table.isRanking();
     }
 
 }
