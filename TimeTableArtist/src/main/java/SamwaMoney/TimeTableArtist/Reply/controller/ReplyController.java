@@ -53,7 +53,7 @@ public class ReplyController {
     @DeleteMapping("replies/{memberId}/{replyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public String removeReply(@PathVariable Long memberId, @PathVariable Long replyId) {
-        replyService.removeReply(replyId);
-        return "댓글이 삭제되었습니다.";
+        String notice = replyService.removeReply(memberId, replyId);
+        return notice;
     }
 }
