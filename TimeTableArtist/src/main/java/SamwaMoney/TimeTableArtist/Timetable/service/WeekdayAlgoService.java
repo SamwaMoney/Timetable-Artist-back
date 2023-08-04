@@ -153,17 +153,7 @@ public class WeekdayAlgoService {
         ArrayList<Integer> classTime = new ArrayList<>();
         for (ClassDto c : day) {
             long time = (c.getEndH() - c.getStartH()) * 60 + c.getEndH() - c.getStartM();
-            if (time < 90){
-                classTime.add(0);
-            } else if (time >= 90 && time < 180){
-                classTime.add(1);
-            } else if (time >= 180 && time < 270){
-                classTime.add(2);
-            } else if (time >= 270 && time < 360){
-                classTime.add(3);
-            } else if (time == 360){
-                classTime.add(4);
-            }
+            classTime.add((int)(time/90));
         }
 
         long diff; // 강의와 강의 사이의 시간을 계산
