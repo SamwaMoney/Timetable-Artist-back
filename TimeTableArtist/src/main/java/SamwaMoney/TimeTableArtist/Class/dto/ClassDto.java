@@ -19,6 +19,7 @@ public class ClassDto {
     private Long startM;
     private Long endH;
     private Long endM;
+    private String bgColor;
 
     public static ClassDto from(Class classEntity) {
         return ClassDto.builder()
@@ -29,6 +30,7 @@ public class ClassDto {
                 .startM(classEntity.getStartM())
                 .endH(classEntity.getEndH())
                 .endM(classEntity.getEndM())
+                .bgColor(classEntity.getBgColor())
                 .build();
     }
 }

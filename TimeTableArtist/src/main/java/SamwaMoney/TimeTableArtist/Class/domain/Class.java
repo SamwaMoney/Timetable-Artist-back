@@ -42,8 +42,10 @@ public class Class {
 
     private Long endM;
 
+    private String bgColor;
+
     @Builder
-    public Class(Timetable timetable, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM) {
+    public Class(Timetable timetable, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM, String bgColor) {
         this.timetable = timetable;
         this.className = className;
         this.location = location;
@@ -52,5 +54,6 @@ public class Class {
         this.startM = startM;
         this.endH = endH;
         this.endM = endM;
+        this.bgColor = bgColor;
     }
 }
