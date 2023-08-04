@@ -44,7 +44,7 @@ public class TimetableController {
     @DeleteMapping("/{member_id}/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
     public String timetableRemove(@PathVariable("member_id") final Long memberId, @PathVariable("timetable_id") final Long timetableId) {
-        timetableService.removeTimetable(memberId, timetableId);
+        timetableService.removeTimetable(timetableId, memberId);
         return "시간표가 성공적으로 삭제되었습니다.";
     }
 
