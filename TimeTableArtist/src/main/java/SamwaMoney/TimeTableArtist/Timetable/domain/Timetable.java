@@ -28,7 +28,7 @@ public class Timetable extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false, updatable = false)
     private Member owner;
 
-    @OneToMany(mappedBy = "timetable")
+    @OneToMany(mappedBy = "timetable", cascade = CascadeType.REMOVE)
     private List<Class> classList = new ArrayList<>();
 
     @Setter
