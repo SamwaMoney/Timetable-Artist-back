@@ -30,6 +30,7 @@ public class TimetableFullResponseDto {
     private Long likeCount;
     private boolean isLiked;
     private boolean ranking;
+    private String imgUrl;
 
 
     @Builder
@@ -53,6 +54,6 @@ public class TimetableFullResponseDto {
         this.likeCount = likeCount;
         this.isLiked = isLiked;
         this.ranking = table.isRanking();
+        this.imgUrl = table.getImgUrl();
     }
-
 }
