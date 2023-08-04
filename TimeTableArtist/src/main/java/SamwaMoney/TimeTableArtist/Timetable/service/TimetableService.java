@@ -333,10 +333,13 @@ public class TimetableService {
             long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
             boolean isLiked = false;
 
-            if (memberId != -1) {
-                isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
+            boolean ranking = timetable.isRanking();
+            if (ranking){
+                if (memberId != -1) {
+                    isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
+                }
+                responseList.add(RankingboardGetResponseDto.from(timetable, likeCount, isLiked));
             }
-            responseList.add(RankingboardGetResponseDto.from(timetable, likeCount, isLiked));
         }
         return responseList;
     }
