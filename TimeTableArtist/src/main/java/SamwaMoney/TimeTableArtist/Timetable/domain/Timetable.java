@@ -9,6 +9,8 @@ import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,9 +28,10 @@ public class Timetable extends BaseTimeEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member owner;
 
-    @OneToMany(mappedBy = "timetable", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "timetable")
     private List<Class> classList = new ArrayList<>();
 
     @Setter

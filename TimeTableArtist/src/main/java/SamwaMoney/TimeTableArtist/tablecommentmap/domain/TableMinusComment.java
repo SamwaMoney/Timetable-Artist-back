@@ -3,6 +3,8 @@ package SamwaMoney.TimeTableArtist.tablecommentmap.domain;
 import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -18,6 +20,7 @@ public class TableMinusComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="timetable_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Timetable timetable;
 
     @ManyToOne(fetch = FetchType.LAZY)
