@@ -29,20 +29,14 @@ public class Class {
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
     private Weekday weekday;
 
-    // 비대면 강의를 고려하여 null=true로 수정
-    @Column(nullable = true)
     private Long startH;
 
-    @Column(nullable = true)
     private Long startM;
 
-    @Column(nullable = true)
     private Long endH;
 
-    @Column(nullable = true)
     private Long endM;
 
     @Builder

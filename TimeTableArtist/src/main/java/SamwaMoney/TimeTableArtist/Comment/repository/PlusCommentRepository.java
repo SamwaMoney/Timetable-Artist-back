@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.ArrayList;
 
 public interface PlusCommentRepository extends JpaRepository<PlusComment, Long> {
-    ArrayList<PlusComment> findAll();
+//    ArrayList<PlusComment> findAll();
 }

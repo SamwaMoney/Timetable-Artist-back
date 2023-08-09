@@ -29,8 +29,6 @@ import java.util.List;
 public class TimetableController {
 
     private final TimetableService timetableService;
-    private final TimetableRepository timetableRepository;
-    private final ClassService classService;
     private final TableLikeService tableLikeService;
     private final S3Uploader s3Uploader;
 
@@ -91,5 +89,13 @@ public class TimetableController {
         String tableTypeContent = timetableService.readTableTypeContent(timetableId);
         RankingResponseDto rankingResponseDto = timetableService.updateByRankingReqDto(timetableId, rankingReqDto, fileUrl);
         return ResponseEntity.ok(rankingResponseDto);
+    }
+
+    // 랭킹보드 조회
+    @GetMapping("/rankingboard")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<RankingboardGetResponseDto> getRankingboard(@RequestParam("sortType") String sortType, @RequestParam("memberId") Long memberId) {
+        List<RankingboardGetResponseDto> rankingboard = timetableService.getRankingboardTimetables(sortType, memberId);
+        return rankingboard;
     }
 }

@@ -32,8 +32,7 @@ public class ReplyController {
     // 특정 시간표 댓글 목록 조회
     @GetMapping("/timetables/{timetableId}/replies")
     @ResponseStatus(code = HttpStatus.OK)
-    public TimetableRepliesResponseDto readTimetableReplies(@PathVariable Long timetableId, @RequestBody HeartRequestDto requestDto){
-        Long memberId = requestDto.getMemberId();
+    public TimetableRepliesResponseDto readTimetableReplies(@PathVariable Long timetableId, @RequestParam(value = "memberId") Long memberId){
         List<Reply> replyList = replyService.findReplyListByTimetable(timetableId);
         if (memberId != null){
             for (Reply reply : replyList)

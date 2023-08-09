@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/tables/{timetable_id}/likes")
+@RequestMapping("/timetables/{timetable_id}/likes")
 @RequiredArgsConstructor
 public class TableLikeController {
 
