@@ -29,20 +29,21 @@ public class TimetableFullResponseDto {
     private String owner;
     private Long likeCount;
     private boolean isLiked;
-
+    private boolean ranking;
+    private String imgUrl;
 
     @Builder
     public TimetableFullResponseDto(Timetable table, List<ClassDto> classList,
                                     List<CommentResponseDto> plusComments,
                                     List<CommentResponseDto> minusComments,
-                                    List<CommentResponseDto> specialComments, String owner, Long likeCount, boolean isLiked) {
+                                    List<CommentResponseDto> specialComments, String owner, Long likeCount, boolean isLiked, Long replyCount) {
         this.memberId = table.getOwner().getMemberId();
         this.timetableId = table.getTimetableId();
         this.score = table.getScore();
         this.tableType = table.getTableType();
         this.tableTypeContent = table.getTableTypeContent();
         this.classHide = table.isClassHide();
-        this.photo = table.getImgUrl();
+        this.photo = table.getTypeImage();
         this.createdAt = table.getCreatedAt();
         this.classList = classList;
         this.plusComments = plusComments;
@@ -51,6 +52,7 @@ public class TimetableFullResponseDto {
         this.owner = owner;
         this.likeCount = likeCount;
         this.isLiked = isLiked;
+        this.ranking = table.isRanking();
+        this.imgUrl = table.getImgUrl();
     }
-
 }

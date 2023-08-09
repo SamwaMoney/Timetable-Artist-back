@@ -1,5 +1,6 @@
 package SamwaMoney.TimeTableArtist.Member.domain;
 
+import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,9 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "owner")
+    private Timetable timetable;
 
     @Builder
     public Member(String username, String password) {

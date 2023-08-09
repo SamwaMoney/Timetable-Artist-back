@@ -62,6 +62,7 @@ public class ClassService {
                     .startM(classDto.getStartM())
                     .endH(classDto.getEndH())
                     .endM(classDto.getEndM())
+                    .bgColor(classDto.getBgColor())
                     .build();
 
             classes.add(newClass);

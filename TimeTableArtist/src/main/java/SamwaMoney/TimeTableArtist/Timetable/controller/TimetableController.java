@@ -44,15 +44,15 @@ public class TimetableController {
     @DeleteMapping("/{member_id}/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
     public String timetableRemove(@PathVariable("member_id") final Long memberId, @PathVariable("timetable_id") final Long timetableId) {
-        timetableService.removeTimetable(memberId, timetableId);
+        timetableService.removeTimetable(timetableId, memberId);
         return "시간표가 성공적으로 삭제되었습니다.";
     }
 
-    // 내 시간표 조회
+    // timetableId로 시간표 상세 조회   내 시간표 조회 포함
     @GetMapping("/{timetable_id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public TimetableFullResponseDto showTimetable(@PathVariable("timetable_id") Long timetableId) {
-        return timetableService.showTimetable(timetableId);
+    public TimetableFullResponseDto showTimetable(@PathVariable("timetable_id") Long timetableId, @RequestParam(value = "memberId") Long memberId) {
+        return timetableService.showTimetable(timetableId, memberId);
     }
 
     // 시간표 채점
@@ -79,6 +79,13 @@ public class TimetableController {
         }
 
         return timetablesWithLikeStatus;
+    }
+
+    // memberId를 통해 timetableId get
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public TimetableIdResponseDto findTimetableId(@RequestParam(value = "memberId") Long memberId) {
+        return timetableService.findTimetableIdByMemberId(memberId);
     }
 
     // 랭킹보드 게시

@@ -6,7 +6,6 @@ import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.repository.ReplyRepository;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
-import SamwaMoney.TimeTableArtist.Timetable.service.AllClassAlgoService;
 import SamwaMoney.TimeTableArtist.Timetable.service.TimetableService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -34,9 +34,9 @@ public class ReplyService {
         boolean nameHide = requestDto.isNameHide();
         String name = writer.getUsername();
         String replyName = selectName(nameHide, name);
-
         boolean isHeart = false;
         Integer replyLikeCount = 0;
+        timetable.setReplyCount(timetable.getReplyCount() + 1);
         return replyRepository.save(requestDto.toEntity(timetable, writer, replyName, isHeart, replyLikeCount)).getReplyId();
     }
 
@@ -62,9 +62,17 @@ public class ReplyService {
                 .orElseThrow(()->new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
     }
 
-    public void removeReply(Long replyId){
+    public String removeReply(Long memberId, Long replyId){
         Reply reply = findReplyById(replyId);
-        replyRepository.delete(reply);
+        if (Objects.equals(reply.getWriter().getMemberId(), memberId)){
+            Timetable timetable = findReplyById(replyId).getTimetable();
+            timetable.setReplyCount(timetable.getReplyCount()-1);
+            replyRepository.delete(reply);
+            return "댓글이 삭제되었습니다.";
+        }
+        else{
+            return "해당 댓글을 삭제할 권한이 없습니다.";
+        }
     }
 }
 

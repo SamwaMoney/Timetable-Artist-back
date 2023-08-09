@@ -2,9 +2,9 @@ package SamwaMoney.TimeTableArtist.tablecommentmap.domain;
 
 import SamwaMoney.TimeTableArtist.Comment.entity.MinusComment;
 import SamwaMoney.TimeTableArtist.Timetable.domain.Timetable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -20,9 +20,16 @@ public class TableMinusComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="timetable_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Timetable timetable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="minuscomment_id")
     private MinusComment minusComment;
+
+    @Builder
+    public TableMinusComment (Timetable timetable, MinusComment minusComment) {
+        this.timetable = timetable;
+        this.minusComment = minusComment;
+    }
 }

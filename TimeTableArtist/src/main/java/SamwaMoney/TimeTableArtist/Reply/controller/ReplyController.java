@@ -1,7 +1,6 @@
 package SamwaMoney.TimeTableArtist.Reply.controller;
 
 import SamwaMoney.TimeTableArtist.Reply.domain.Reply;
-import SamwaMoney.TimeTableArtist.Reply.dto.HeartRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyRequestDto;
 import SamwaMoney.TimeTableArtist.Reply.dto.ReplyResponseDto;
 import SamwaMoney.TimeTableArtist.Reply.service.ReplyService;
@@ -34,7 +33,7 @@ public class ReplyController {
     @ResponseStatus(code = HttpStatus.OK)
     public TimetableRepliesResponseDto readTimetableReplies(@PathVariable Long timetableId, @RequestParam(value = "memberId") Long memberId){
         List<Reply> replyList = replyService.findReplyListByTimetable(timetableId);
-        if (memberId != null){
+        if (memberId != -1){
             for (Reply reply : replyList)
             {
                 reply.heart = replyLikeService.isHeart(memberId, reply);
@@ -54,7 +53,7 @@ public class ReplyController {
     @DeleteMapping("replies/{memberId}/{replyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public String removeReply(@PathVariable Long memberId, @PathVariable Long replyId) {
-        replyService.removeReply(replyId);
-        return "댓글이 삭제되었습니다.";
+        String notice = replyService.removeReply(memberId, replyId);
+        return notice;
     }
 }

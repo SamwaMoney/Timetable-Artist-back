@@ -9,6 +9,8 @@ import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TablePlusComment;
 import SamwaMoney.TimeTableArtist.tablecommentmap.domain.TableSpecialComment;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Timetable extends BaseTimeEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member owner;
 
     @OneToMany(mappedBy = "timetable")
@@ -35,11 +38,11 @@ public class Timetable extends BaseTimeEntity {
     @Column(nullable = false)
     private Long score;
 
-    @OneToMany(mappedBy = "timetable")
-    private List<TablePlusComment> plusComments = new ArrayList<>();
-
     @Setter
     private Long tableType;
+
+    @OneToMany(mappedBy = "timetable")
+    private List<TablePlusComment> plusComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "timetable")
     private List<TableMinusComment> minusComments = new ArrayList<>();
@@ -56,7 +59,10 @@ public class Timetable extends BaseTimeEntity {
     private boolean classHide;
 
     @Column
-    private String imgUrl;
+    private String imgUrl; // 시간표 게시할 때 프론트로부터 받는 시간표 이미지
+
+    @Setter
+    private String typeImage; // 시간표의 type에 해당하는 짤
 
     @Setter
     private boolean isLiked;
@@ -76,7 +82,7 @@ public class Timetable extends BaseTimeEntity {
 
     @Builder
     public Timetable(Member owner, List<Class> classList, Long score, List<TablePlusComment> plusComments, List<TableMinusComment> minusComments,
-                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, boolean isLiked, Long likeCount, long replyCount, String tableTypeContent) {
+                     List<TableSpecialComment> specialComments, boolean ranking, boolean classHide, String imgUrl, String typeImage, boolean isLiked, Long likeCount, long replyCount, String tableTypeContent) {
         this.owner = owner;
         this.classList = classList;
         this.score = score;
@@ -86,6 +92,7 @@ public class Timetable extends BaseTimeEntity {
         this.ranking = ranking;
         this.classHide = classHide;
         this.imgUrl = imgUrl;
+        this.typeImage = typeImage;
         this.isLiked = isLiked;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
@@ -112,5 +119,9 @@ public class Timetable extends BaseTimeEntity {
         this.ranking = rankingRequestDto.isRanking();
         this.imgUrl = fileUrl;
         this.tableTypeContent = tableTypeContent;
+    }
+
+    public void updateReplyCount(Long newReplyCount){
+        this.replyCount = newReplyCount;
     }
 }
