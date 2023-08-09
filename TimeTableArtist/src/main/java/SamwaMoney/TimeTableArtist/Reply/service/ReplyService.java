@@ -34,9 +34,14 @@ public class ReplyService {
         boolean nameHide = requestDto.isNameHide();
         String name = writer.getUsername();
         String replyName = selectName(nameHide, name);
+        Long replyCount = timetable.getReplyCount();
 
         boolean isHeart = false;
         Integer replyLikeCount = 0;
+
+        Long newReplyCount = replyCount + 1;
+        timetable.updateReplyCount(newReplyCount);
+
         return replyRepository.save(requestDto.toEntity(timetable, writer, replyName, isHeart, replyLikeCount)).getReplyId();
     }
 
@@ -65,6 +70,15 @@ public class ReplyService {
     public void removeReply(Long replyId){
         Reply reply = findReplyById(replyId);
         replyRepository.delete(reply);
+        Timetable timetable = reply.getTimetable();
+        Integer replyCount = getReplyCount(timetable);
+        timetable.updateReplyCount(Long.valueOf(replyCount));
+    }
+
+    @Transactional (readOnly = true)
+    public Integer getReplyCount(Timetable timetable) {
+        Integer replyCount = replyRepository.countByTimetable(timetable);
+        return replyCount;
     }
 }
 
