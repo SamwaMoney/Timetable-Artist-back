@@ -270,7 +270,7 @@ public class TimetableService {
             long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
             boolean isLiked = false;
 
-            if (memberId != null) {
+            if (memberId != -1) {
                 isLiked = tableLikeService.isTimetableLikedByMember(timetable.getTimetableId(), memberId);
             }
             responseList.add(RankingboardGetResponseDto.from(timetable, likeCount, isLiked));
