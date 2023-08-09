@@ -17,7 +17,7 @@ public class TableTypeAlgoService {
     }
 
     // 특정 시간표의 스페셜 코멘트 아이디 리스트를 받아와서, DB를 참고하여 우선순위대로 정렬 후, 가장 우선순위가 높은 것의 ID를 리턴
-    public int tableTypeAlgo(List<Long> special) {
+    public Long tableTypeAlgo(List<Long> special) {
         // Comparator 내부 메소드 오버라이딩을 통해 정렬 방식 정의
         Comparator<Long> cp = new Comparator<Long>() {
             @Override
@@ -40,8 +40,8 @@ public class TableTypeAlgoService {
 
         // 가장 우선순위가 높은 하나의 코멘트의 ID를 리턴
         if (!special.isEmpty()) {
-            return special.get(0).intValue();
+            return special.get(0);
         }
-        return -1; // 혹시나 빈 리스트라면 -1을 리턴
+        return -1L; // 혹시나 빈 리스트라면 -1을 리턴
     }
 }

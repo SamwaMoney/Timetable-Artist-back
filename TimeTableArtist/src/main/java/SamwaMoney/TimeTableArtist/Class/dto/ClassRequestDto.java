@@ -16,5 +16,6 @@ public class ClassRequestDto {
     private Long startM;
     private Long endH;
     private Long endM;
+    private String bgColor;
 }
 

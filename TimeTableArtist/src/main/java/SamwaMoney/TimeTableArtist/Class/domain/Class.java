@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -21,6 +23,7 @@ public class Class {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Timetable timetable;
 
     @Column(nullable = false)
@@ -39,8 +42,10 @@ public class Class {
 
     private Long endM;
 
+    private String bgColor;
+
     @Builder
-    public Class(Timetable timetable, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM) {
+    public Class(Timetable timetable, String className, String location, Weekday weekday, Long startH, Long startM, Long endH, Long endM, String bgColor) {
         this.timetable = timetable;
         this.className = className;
         this.location = location;
@@ -49,5 +54,6 @@ public class Class {
         this.startM = startM;
         this.endH = endH;
         this.endM = endM;
+        this.bgColor = bgColor;
     }
 }
