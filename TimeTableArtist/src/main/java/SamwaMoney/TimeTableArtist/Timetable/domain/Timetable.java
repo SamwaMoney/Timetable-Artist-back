@@ -120,4 +120,8 @@ public class Timetable extends BaseTimeEntity {
         this.imgUrl = fileUrl;
         this.tableTypeContent = tableTypeContent;
     }
+
+    public void updateReplyCount(Long newReplyCount){
+        this.replyCount = newReplyCount;
+    }
 }

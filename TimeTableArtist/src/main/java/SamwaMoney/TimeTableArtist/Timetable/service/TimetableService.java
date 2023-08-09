@@ -293,6 +293,7 @@ public class TimetableService {
                 .owner(timetable.getOwner().getUsername())
                 .likeCount(timetable.getLikeCount())
                 .isLiked(isLiked)
+                .replyCount(timetable.getReplyCount())
                 .build();
     }
 
@@ -332,7 +333,6 @@ public class TimetableService {
         for (Timetable timetable : allTimetables) {
             long likeCount = tableLikeService.getLikeCount(timetable.getTimetableId());
             boolean isLiked = false;
-
             boolean ranking = timetable.isRanking();
             if (ranking){
                 if (memberId != -1) {
